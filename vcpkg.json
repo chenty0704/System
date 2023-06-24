@@ -1,0 +1,10 @@
+{
+    "name": "system",
+    "version": "1.0",
+    "dependencies": [
+        "boost-describe",
+        "boost-json",
+        "gtest",
+        "mdspan"
+    ]
+}
