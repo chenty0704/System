@@ -4,7 +4,7 @@ DEFINE_ENUM(TemperatureUnit, Fahrenheit, Celsius, Kelvin)
 
 struct Temperature {
     double Value;
-    TemperatureUnit Unit;
+    TemperatureUnit Unit = TemperatureUnit::Fahrenheit;
 
     bool operator==(const Temperature &) const = default;
 };
@@ -19,4 +19,6 @@ TEST(JSONTest, Serialization) {
 TEST(JSONTest, Deserialization) {
     EXPECT_EQ(JSON::Deserialize<Temperature>(R"({"Value":10,"Unit":"Celsius"})"),
               (Temperature{10, TemperatureUnit::Celsius}));
+    EXPECT_EQ(JSON::Deserialize<Temperature>(R"({"Value":10})"),
+              (Temperature{10, TemperatureUnit::Fahrenheit}));
 }

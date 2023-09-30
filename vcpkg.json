@@ -4,6 +4,7 @@
     "dependencies": [
         "boost-describe",
         "boost-json",
+        "boost-mp11",
         "gtest",
         "mdspan"
     ]
