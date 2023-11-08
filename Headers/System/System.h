@@ -12,6 +12,10 @@
 #include <span>
 #include <unordered_map>
 #include <vector>
+
+#define MDSPAN_USE_PAREN_OPERATOR true
+
+#include <experimental/mdarray>
 #include <experimental/mdspan>
 
 #include "System/JSON.h"
