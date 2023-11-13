@@ -1,5 +1,6 @@
 #pragma once
 
+#include <concepts>
 #include <string>
 
 #include <boost/describe.hpp>
@@ -12,7 +13,7 @@ namespace describe = boost::describe;
 namespace json = boost::json;
 namespace mp11 = boost::mp11;
 
-template<typename T>
+template<semiregular T>
 requires is_class_v<T>
 T tag_invoke(const json::value_to_tag<T> &, const json::value &value) {
     T obj;
@@ -27,12 +28,12 @@ T tag_invoke(const json::value_to_tag<T> &, const json::value &value) {
 }
 
 namespace JSON {
-    template<typename T>
+    template<semiregular T>
     inline string Serialize(const T &obj) {
         return json::serialize(json::value_from(obj));
     }
 
-    template<typename T>
+    template<semiregular T>
     inline T Deserialize(string_view str) {
         return json::value_to<T>(json::parse(str));
     }
