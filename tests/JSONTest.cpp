@@ -1,5 +1,8 @@
 #include <gtest/gtest.h>
 
+#include "System/JSON.h"
+#include "System/Reflection.h"
+
 DEFINE_ENUM(TemperatureUnit, Fahrenheit, Celsius, Kelvin)
 
 struct Temperature {

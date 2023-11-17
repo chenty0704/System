@@ -2,7 +2,7 @@
 
 #include <boost/describe.hpp>
 
-/// \brief Describes a enum.
+/// \brief Defines and describes a enum.
 /// \param E The type of the enum.
 /// \param ... The values of the enum.
 #define DEFINE_ENUM(E, ...) BOOST_DEFINE_ENUM_CLASS(E, __VA_ARGS__)

@@ -13,10 +13,10 @@ set(Boost_NO_WARN_NEW_VERSIONS ON)
 find_package(Boost REQUIRED COMPONENTS json)
 find_package(mdspan REQUIRED CONFIG)
 
-include_directories(Headers)
+include_directories(include)
 
-add_subdirectory(Headers)
-add_subdirectory(Tests)
+add_subdirectory(include)
+add_subdirectory(tests)
 
 install(FILES cmake/SystemConfig.cmake
         DESTINATION share/System)
