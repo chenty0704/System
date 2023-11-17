@@ -2,7 +2,8 @@ cmake_minimum_required(VERSION 3.27)
 
 project(System
         VERSION 1.0
-        DESCRIPTION "Core functionalities for C++"
+        DESCRIPTION "Core utilities for C++"
+        HOMEPAGE_URL "https://github.com/chenty0704/System"
         LANGUAGES CXX)
 
 set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
