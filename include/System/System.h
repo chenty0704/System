@@ -4,6 +4,7 @@
 #include <concepts>
 #include <deque>
 #include <execution>
+#include <format>
 #include <functional>
 #include <iostream>
 #include <list>
