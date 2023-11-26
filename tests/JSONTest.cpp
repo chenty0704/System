@@ -1,7 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "System/JSON.h"
-#include "System/Reflection.h"
+#include "System/System.h"
 
 DEFINE_ENUM(TemperatureUnit, Fahrenheit, Celsius, Kelvin)
 
@@ -14,12 +13,12 @@ struct Temperature {
 
 DESCRIBE_STRUCT(Temperature, (), (Value, Unit))
 
-TEST(JSONTest, Serialization) {
+TEST(JSONTest, StructSerialization) {
     EXPECT_EQ(JSON::Serialize(Temperature{10, TemperatureUnit::Fahrenheit}),
               R"({"Value":1E1,"Unit":"Fahrenheit"})");
 }
 
-TEST(JSONTest, Deserialization) {
+TEST(JSONTest, StructDeserialization) {
     EXPECT_EQ(JSON::Deserialize<Temperature>(R"({"Value":10,"Unit":"Celsius"})"),
               (Temperature{10, TemperatureUnit::Celsius}));
     EXPECT_EQ(JSON::Deserialize<Temperature>(R"({"Value":10})"),

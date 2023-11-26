@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <concepts>
 #include <deque>
 #include <execution>
 #include <functional>
@@ -8,10 +9,15 @@
 #include <list>
 #include <memory>
 #include <print>
+#include <queue>
 #include <random>
 #include <ranges>
 #include <span>
+#include <stack>
+#include <string>
+#include <type_traits>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 
 #define MDSPAN_USE_PAREN_OPERATOR true
