@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <cmath>
 #include <concepts>
 #include <deque>
 #include <execution>
@@ -26,9 +27,14 @@
 #include <experimental/mdarray>
 #include <experimental/mdspan>
 
+#include <boost/math/statistics/bivariate_statistics.hpp>
+#include <boost/math/statistics/univariate_statistics.hpp>
+
 #include "System/JSON.h"
 #include "System/Reflection.h"
 
 using namespace std;
 using namespace std::experimental;
 using namespace std::literals;
+
+namespace statistics = boost::math::statistics;

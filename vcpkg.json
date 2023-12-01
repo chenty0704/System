@@ -8,6 +8,7 @@
         {"name": "vcpkg-cmake-config", "host": true},
         {"name": "boost-describe"},
         {"name": "boost-json"},
+        {"name": "boost-math"},
         {"name": "boost-mp11"},
         {"name": "gtest"},
         {"name": "mdspan"}
