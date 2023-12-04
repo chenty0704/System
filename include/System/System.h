@@ -3,9 +3,11 @@
 #include <algorithm>
 #include <cmath>
 #include <concepts>
+#include <cstddef>
 #include <deque>
 #include <execution>
 #include <format>
+#include <fstream>
 #include <functional>
 #include <iostream>
 #include <list>
