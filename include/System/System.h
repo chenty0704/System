@@ -1,17 +1,21 @@
 #pragma once
 
 #include <algorithm>
+#include <bit>
+#include <cassert>
 #include <cmath>
 #include <concepts>
 #include <cstddef>
 #include <deque>
 #include <execution>
+#include <filesystem>
 #include <format>
 #include <fstream>
 #include <functional>
 #include <iostream>
 #include <list>
 #include <memory>
+#include <numeric>
 #include <print>
 #include <queue>
 #include <random>
@@ -19,9 +23,11 @@
 #include <span>
 #include <stack>
 #include <string>
+#include <tuple>
 #include <type_traits>
 #include <unordered_map>
 #include <unordered_set>
+#include <utility>
 #include <vector>
 
 #define MDSPAN_USE_PAREN_OPERATOR true
@@ -37,7 +43,12 @@
 #include "System/Reflection.h"
 
 using namespace std;
-using namespace std::experimental;
 using namespace std::literals;
 
 namespace statistics = boost::math::statistics;
+
+using experimental::dextents;
+using experimental::full_extent;
+using experimental::mdarray;
+using experimental::mdspan;
+using experimental::submdspan;

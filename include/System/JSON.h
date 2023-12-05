@@ -17,9 +17,9 @@ namespace mp11 = boost::mp11;
 
 namespace boost::json {
     template<DescribedStruct T>
-    T tag_invoke(const value_to_tag<T> &, const value &value) {
+    T tag_invoke(const value_to_tag<T> &, const value &val) {
         T obj;
-        const auto &_obj = value.as_object();
+        const auto &_obj = val.as_object();
         using members = describe::describe_members<T, describe::mod_public>;
         mp11::mp_for_each<members>([&](auto member) {
             using M = remove_reference_t<decltype(obj.*member.pointer)>;

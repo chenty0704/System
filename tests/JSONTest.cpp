@@ -8,7 +8,7 @@ struct Temperature {
     double Value;
     TemperatureUnit Unit = TemperatureUnit::Fahrenheit;
 
-    bool operator==(const Temperature &) const = default;
+    bool operator==(const Temperature &) const noexcept = default;
 };
 
 DESCRIBE_STRUCT(Temperature, (), (Value, Unit))
