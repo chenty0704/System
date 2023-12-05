@@ -11,6 +11,7 @@ set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
 set(Boost_NO_WARN_NEW_VERSIONS ON)
 
 find_package(Boost REQUIRED COMPONENTS json)
+find_package(GTest REQUIRED CONFIG)
 find_package(mdspan REQUIRED CONFIG)
 
 include_directories(include)
