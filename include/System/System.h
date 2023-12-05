@@ -29,6 +29,7 @@
 #include <experimental/mdarray>
 #include <experimental/mdspan>
 
+#include <boost/preprocessor.hpp>
 #include <boost/math/statistics/bivariate_statistics.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 
