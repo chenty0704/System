@@ -30,25 +30,15 @@
 #include <utility>
 #include <vector>
 
-#define MDSPAN_USE_PAREN_OPERATOR true
-
-#include <experimental/mdarray>
-#include <experimental/mdspan>
-
 #include <boost/preprocessor.hpp>
 #include <boost/math/statistics/bivariate_statistics.hpp>
 #include <boost/math/statistics/univariate_statistics.hpp>
 
 #include "System/JSON.h"
+#include "System/MDArray.h"
 #include "System/Reflection.h"
 
 using namespace std;
 using namespace std::literals;
 
 namespace statistics = boost::math::statistics;
-
-using experimental::dextents;
-using experimental::full_extent;
-using experimental::mdarray;
-using experimental::mdspan;
-using experimental::submdspan;
