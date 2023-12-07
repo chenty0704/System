@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <string>
 #include <type_traits>
 
@@ -16,8 +17,12 @@ namespace json = boost::json;
 namespace mp11 = boost::mp11;
 
 namespace boost::json {
+    inline filesystem::path tag_invoke(const value_to_tag<filesystem::path> &, const value &val) {
+        return val.as_string().data();
+    }
+
     template<DescribedStruct T>
-    T tag_invoke(const value_to_tag<T> &, const value &val) {
+    T tag_invoke_default(const value_to_tag<T> &, const value &val) {
         T obj;
         const auto &_obj = val.as_object();
         using members = describe::describe_members<T, describe::mod_public>;
@@ -27,6 +32,11 @@ namespace boost::json {
                 obj.*member.pointer = value_to<M>(it->value());
         });
         return obj;
+    }
+
+    template<DescribedStruct T>
+    T tag_invoke(const value_to_tag<T> &tag, const value &val) {
+        return tag_invoke_default(tag, val);
     }
 }
 
