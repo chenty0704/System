@@ -23,4 +23,5 @@ TEST(JSONTest, StructDeserialization) {
               (Temperature{10, TemperatureUnit::Celsius}));
     EXPECT_EQ(JSON::Deserialize<Temperature>(R"({"Value":10})"),
               (Temperature{10, TemperatureUnit::Fahrenheit}));
+    EXPECT_THROW(JSON::Deserialize<Temperature>(R"({"Val":10})"), runtime_error);
 }

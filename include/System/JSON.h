@@ -1,6 +1,8 @@
 #pragma once
 
 #include <filesystem>
+#include <ranges>
+#include <stdexcept>
 #include <string>
 #include <type_traits>
 
@@ -22,21 +24,26 @@ namespace boost::json {
     }
 
     template<DescribedStruct T>
-    T tag_invoke_default(const value_to_tag<T> &, const value &val) {
+    T default_tag_invoke(const value_to_tag<T> &, const value &val) {
         T obj;
-        const auto &_obj = val.as_object();
         using members = describe::describe_members<T, describe::mod_public>;
-        mp11::mp_for_each<members>([&](auto member) {
-            using M = remove_reference_t<decltype(obj.*member.pointer)>;
-            if (const auto it = _obj.find(member.name); it != _obj.cend())
-                obj.*member.pointer = value_to<M>(it->value());
-        });
+        for (const auto &[k, v] : val.as_object()) {
+            auto matched = false;
+            mp11::mp_for_each<members>([&](auto member) {
+                if (!matched && k == member.name) {
+                    using M = remove_reference_t<decltype(obj.*member.pointer)>;
+                    obj.*member.pointer = value_to<M>(v);
+                    matched = true;
+                }
+            });
+            if (!matched) throw runtime_error("Invalid key.");
+        }
         return obj;
     }
 
     template<DescribedStruct T>
     T tag_invoke(const value_to_tag<T> &tag, const value &val) {
-        return tag_invoke_default(tag, val);
+        return default_tag_invoke(tag, val);
     }
 }
 

@@ -7,6 +7,7 @@
 #include <concepts>
 #include <cstddef>
 #include <deque>
+#include <exception>
 #include <execution>
 #include <filesystem>
 #include <format>
@@ -22,6 +23,7 @@
 #include <ranges>
 #include <span>
 #include <stack>
+#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <type_traits>
