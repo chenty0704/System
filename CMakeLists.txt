@@ -19,5 +19,7 @@ include_directories(include)
 add_subdirectory(include)
 add_subdirectory(tests)
 
-install(FILES cmake/SystemConfig.cmake
+install(FILES
+        cmake/SystemConfig.cmake
+        System.natvis
         DESTINATION share/System)

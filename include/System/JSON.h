@@ -20,7 +20,7 @@ namespace mp11 = boost::mp11;
 
 namespace boost::json {
     inline filesystem::path tag_invoke(const value_to_tag<filesystem::path> &, const value &val) {
-        return val.as_string().data();
+        return std::string_view(val.as_string());
     }
 
     template<DescribedStruct T>
