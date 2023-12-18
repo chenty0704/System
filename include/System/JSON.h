@@ -5,7 +5,6 @@
 #include <stdexcept>
 #include <string>
 #include <type_traits>
-
 #include <boost/describe.hpp>
 #include <boost/json.hpp>
 #include <boost/mp11.hpp>
@@ -13,7 +12,6 @@
 #include "System/Reflection.h"
 
 using namespace std;
-
 namespace describe = boost::describe;
 namespace json = boost::json;
 namespace mp11 = boost::mp11;

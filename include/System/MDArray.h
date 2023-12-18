@@ -6,7 +6,6 @@
 #include <experimental/mdspan>
 
 using namespace std;
-
 using experimental::dextents;
 using experimental::full_extent;
 using experimental::mdarray;

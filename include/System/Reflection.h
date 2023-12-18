@@ -2,12 +2,10 @@
 
 #include <concepts>
 #include <type_traits>
-
 #include <boost/describe.hpp>
 #include <boost/mp11.hpp>
 
 using namespace std;
-
 namespace describe = boost::describe;
 namespace mp11 = boost::mp11;
 
