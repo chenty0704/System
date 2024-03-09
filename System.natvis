@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+    <Type Name="std::vector&lt;bool, *&gt;">
+        <Intrinsic Name="values" Expression="_Myvec._Mypair._Myval2"/>
+        <Intrinsic Name="data" Expression="values()._Myfirst"/>
+        <Intrinsic Name="size" Expression="_Mysize"/>
+        <Intrinsic Name="capacity" Expression="(values()._Myend - values()._Myfirst) * _EEN_VBITS"/>
+        <DisplayString>{{size={size()}}}</DisplayString>
+        <Expand>
+            <Item Name="[capacity]">capacity()</Item>
+            <Item Name="[allocator]">_Myvec._Mypair</Item>
+            <IndexListItems>
+                <Size>size()</Size>
+                <ValueNode>static_cast&lt;bool&gt;((data()[$i / _EEN_VBITS] &gt;&gt; ($i % _EEN_VBITS)) &amp; 1)
+                </ValueNode>
+            </IndexListItems>
+        </Expand>
+    </Type>
+
+    <Type Name="std::experimental::mdarray&lt;*, *, *, *&gt;">
+        <Intrinsic Name="values" Expression="ctr_._Mypair._Myval2"/>
+        <Intrinsic Name="size" Expression="values()._Mylast - values()._Myfirst"/>
+        <Intrinsic Name="rank" Expression="extents_type::m_rank"/>
+        <Intrinsic Name="extents" Expression="map_.__extents"/>
+        <Intrinsic Name="extent0" Expression="extents().m_vals.value(0)"/>
+        <Intrinsic Name="extent1" Expression="extents().m_vals.value(1)"/>
+        <Intrinsic Name="extent2" Expression="extents().m_vals.value(2)"/>
+        <DisplayString Condition="rank() == 1">{{extents={{{extent0()}}}}}</DisplayString>
+        <DisplayString Condition="rank() == 2">{{extents={{{extent0()},{extent1()}}}}}</DisplayString>
+        <DisplayString Condition="rank() == 3">{{extents={{{extent0()},{extent1()},{extent2()}}}}}</DisplayString>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <Item Name="[rank]">rank()</Item>
+            <ArrayItems Condition="rank() == 1">
+                <Size>size()</Size>
+                <ValuePointer>&amp;ctr_[0]</ValuePointer>
+            </ArrayItems>
+            <CustomListItems Condition="rank() == 2">
+                <Variable Name="i" InitialValue="0"/>
+                <Size>size()</Size>
+                <Loop>
+                    <Break Condition="i == size()"/>
+                    <Item Name="[{i / extent1()},{i % extent1()}]">ctr_[i]</Item>
+                    <Exec>++i</Exec>
+                </Loop>
+            </CustomListItems>
+            <CustomListItems Condition="rank() == 3">
+                <Variable Name="i" InitialValue="0"/>
+                <Size>size()</Size>
+                <Loop>
+                    <Break Condition="i == size()"/>
+                    <Item Name="[{i / (extent1() * extent2())},{(i / extent2()) % extent1()},{i % extent2()}]">
+                        ctr_[i]
+                    </Item>
+                    <Exec>++i</Exec>
+                </Loop>
+            </CustomListItems>
+        </Expand>
+    </Type>
+
+    <Type Name="std::experimental::mdspan&lt;*, *, *, *&gt;">
+        <Intrinsic Name="data" Expression="__members.__t_val"/>
+        <Intrinsic Name="size1" Expression="extent0()"/>
+        <Intrinsic Name="size2" Expression="extent0() * extent1()"/>
+        <Intrinsic Name="size3" Expression="extent0() * extent1() * extent2()"/>
+        <Intrinsic Name="rank" Expression="extents_type::m_rank"/>
+        <Intrinsic Name="extents" Expression="__members.__u_val.__t_val.__extents"/>
+        <Intrinsic Name="extent0" Expression="extents().m_vals.m_dyn_vals.vals[0]"/>
+        <Intrinsic Name="extent1" Expression="extents().m_vals.m_dyn_vals.vals[1]"/>
+        <Intrinsic Name="extent2" Expression="extents().m_vals.m_dyn_vals.vals[2]"/>
+        <DisplayString Condition="rank() == 1">{{extents={{{extent0()}}}}}</DisplayString>
+        <DisplayString Condition="rank() == 2">{{extents={{{extent0()},{extent1()}}}}}</DisplayString>
+        <DisplayString Condition="rank() == 3">{{extents={{{extent0()},{extent1()},{extent2()}}}}}</DisplayString>
+        <Expand>
+            <Item Name="[size]" Condition="rank() == 1">size1()</Item>
+            <Item Name="[size]" Condition="rank() == 2">size2()</Item>
+            <Item Name="[size]" Condition="rank() == 3">size3()</Item>
+            <Item Name="[rank]">rank()</Item>
+            <ArrayItems Condition="rank() == 1">
+                <Size>size1()</Size>
+                <ValuePointer>data()</ValuePointer>
+            </ArrayItems>
+            <CustomListItems Condition="rank() == 2">
+                <Variable Name="i" InitialValue="0"/>
+                <Size>size2()</Size>
+                <Loop>
+                    <Break Condition="i == size2()"/>
+                    <Item Name="[{i / extent1()},{i % extent1()}]">data()[i]</Item>
+                    <Exec>++i</Exec>
+                </Loop>
+            </CustomListItems>
+            <CustomListItems Condition="rank() == 3">
+                <Variable Name="i" InitialValue="0"/>
+                <Size>size3()</Size>
+                <Loop>
+                    <Break Condition="i == size3()"/>
+                    <Item Name="[{i / (extent1() * extent2())},{(i / extent2()) % extent1()},{i % extent2()}]">
+                        data()[i]
+                    </Item>
+                    <Exec>++i</Exec>
+                </Loop>
+            </CustomListItems>
+        </Expand>
+    </Type>
+
+    <Type Name="boost::core::basic_string_view&lt;*&gt;">
+        <Intrinsic Name="data" Expression="p_"/>
+        <Intrinsic Name="size" Expression="n_"/>
+        <DisplayString>{data(), [size()]}</DisplayString>
+        <StringView>data(), [size()]</StringView>
+        <Expand>
+            <Item Name="[size]">size()</Item>
+            <ArrayItems>
+                <Size>size()</Size>
+                <ValuePointer>data()</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
+
+    <Type Name="boost::json::string">
+        <Intrinsic Name="bufSize" Expression="14"/>
+        <Intrinsic Name="isShort" Expression="impl_.s_.k == impl_.short_string_"/>
+        <Intrinsic Name="shortData" Expression="impl_.s_.buf"/>
+        <Intrinsic Name="shortSize" Expression="bufSize() - impl_.s_.buf[bufSize()]"/>
+        <Intrinsic Name="data" Expression="reinterpret_cast&lt;char *&gt;(impl_.p_.t + 1)"/>
+        <Intrinsic Name="size" Expression="impl_.p_.t->size"/>
+        <Intrinsic Name="capacity" Expression="impl_.p_.t->capacity"/>
+        <DisplayString Condition="isShort()">{shortData(), na}</DisplayString>
+        <DisplayString Condition="!isShort()">{data(), na}</DisplayString>
+        <StringView Condition="isShort()">shortData(), na</StringView>
+        <StringView Condition="!isShort()">data(), na</StringView>
+        <Expand>
+            <Item Name="[size]" Condition="isShort()">shortSize()</Item>
+            <Item Name="[size]" Condition="!isShort()">size()</Item>
+            <Item Name="[capacity]" Condition="isShort()">bufSize()</Item>
+            <Item Name="[capacity]" Condition="!isShort()">capacity()</Item>
+            <ArrayItems Condition="isShort()">
+                <Size>shortSize()</Size>
+                <ValuePointer>shortData()</ValuePointer>
+            </ArrayItems>
+            <ArrayItems Condition="!isShort()">
+                <Size>size()</Size>
+                <ValuePointer>data()</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
+
+    <Type Name="boost::json::value">
+        <Intrinsic Name="kind"
+                   Expression="static_cast&lt;boost::json::kind&gt;(static_cast&lt;unsigned char&gt;(sca_.k) &amp; 0x3f)"/>
+        <DisplayString Condition="kind() == boost::json::kind::bool_">{{kind=bool, value={sca_.b}}}}</DisplayString>
+        <DisplayString Condition="kind() == boost::json::kind::int64">{{kind=int64, value={sca_.i}}}}</DisplayString>
+        <DisplayString Condition="kind() == boost::json::kind::double_">{{kind=double, value={sca_.d}}}}</DisplayString>
+        <DisplayString Condition="kind() == boost::json::kind::string">{{kind=string, value={str_}}}}</DisplayString>
+        <DisplayString Condition="kind() == boost::json::kind::array">{{kind=array, value={arr_}}}}</DisplayString>
+        <DisplayString Condition="kind() == boost::json::kind::object">{{kind=object, value={obj_}}}}</DisplayString>
+        <Expand>
+            <Item Name="[value]" Condition="kind() == boost::json::kind::bool_">sca_.b</Item>
+            <Item Name="[value]" Condition="kind() == boost::json::kind::int64">sca_.i</Item>
+            <Item Name="[value]" Condition="kind() == boost::json::kind::double_">sca_.d</Item>
+            <Item Name="[value]" Condition="kind() == boost::json::kind::string">str_</Item>
+            <Item Name="[value]" Condition="kind() == boost::json::kind::array">arr_</Item>
+            <Item Name="[value]" Condition="kind() == boost::json::kind::object">obj_</Item>
+        </Expand>
+    </Type>
+
+    <Type Name="boost::json::array">
+        <Intrinsic Name="size" Expression="t_->size"/>
+        <Intrinsic Name="capacity" Expression="t_->capacity"/>
+        <DisplayString>{{size={size()}}}</DisplayString>
+        <Expand>
+            <Item Name="[capacity]">capacity()</Item>
+            <ArrayItems>
+                <Size>size()</Size>
+                <ValuePointer>&amp;(*t_)[0]</ValuePointer>
+            </ArrayItems>
+        </Expand>
+    </Type>
+
+    <Type Name="boost::json::key_value_pair">
+        <Intrinsic Name="key" Expression="key_"/>
+        <Intrinsic Name="value" Expression="value_"/>
+        <DisplayString>({key(), na}, {value()})</DisplayString>
+        <Expand>
+            <Item Name="key">key()</Item>
+            <Item Name="value">value()</Item>
+        </Expand>
+    </Type>
+
+    <Type Name="boost::json::object">
+        <Intrinsic Name="size" Expression="t_->size"/>
+        <DisplayString>{{size={size()}}}</DisplayString>
+        <Expand>
+            <CustomListItems>
+                <Variable Name="it" InitialValue="&amp;(*t_)[0]"/>
+                <Size>size()</Size>
+                <Loop>
+                    <Break Condition="it == &amp;(*t_)[t_->size]"/>
+                    <Item Name="[{it->key_}]">*it</Item>
+                    <Exec>++it</Exec>
+                </Loop>
+            </CustomListItems>
+        </Expand>
+    </Type>
+</AutoVisualizer>
