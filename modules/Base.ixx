@@ -13,6 +13,7 @@ export module System.Base;
 #include <bitset>
 #include <charconv>
 #include <chrono>
+#include <cmath>
 #include <codecvt>
 #include <compare>
 #include <complex>

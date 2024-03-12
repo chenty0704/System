@@ -31,13 +31,15 @@ concept DescribedStruct = is_class_v<T> && describe::has_describe_members<T>::va
 
 export template<DescribedStruct T>
 [[nodiscard]] T default_tag_invoke(const json::value_to_tag<T> &, const json::value &value) {
-    const auto Assign = []<typename M>(M &member, const json::value &_value) { member = json::value_to<M>(_value); };
+    static const auto Assign = []<typename M>(M &member, const json::value &_value) {
+        member = json::value_to<M>(_value);
+    };
 
     T object;
     using members = describe::describe_members<T, describe::mod_public>;
-    for (const auto &keyValuePair : value.as_object()) {
-        const auto key = keyValuePair.key();
-        const auto &_value = keyValuePair.value();
+    for (const auto &pair : value.as_object()) {
+        const auto key = pair.key();
+        const auto &_value = pair.value();
         auto matched = false;
         mp11::mp_for_each<members>([&](auto member) {
             if (!matched && key == member.name) {
