@@ -20,8 +20,6 @@ target_link_libraries(System PUBLIC
         std::mdspan)
 target_compile_features(System PUBLIC cxx_std_23)
 target_compile_options(System PUBLIC /arch:AVX2 /W4 /WX)
-target_compile_definitions(System PUBLIC
-        _FSTREAM_SUPPORTS_EXPERIMENTAL_FILESYSTEM=0)
 target_link_options(System PUBLIC /WX)
 
 install(TARGETS System EXPORT SystemTargets

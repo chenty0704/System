@@ -9,6 +9,7 @@
         {"name": "boost-describe"},
         {"name": "boost-json"},
         {"name": "boost-mp11"},
+        {"name": "boost-preprocessor"},
         {"name": "gtest"},
         {"name": "mdspan"}
     ]
