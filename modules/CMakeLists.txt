@@ -12,8 +12,7 @@ target_sources(System PUBLIC
         "Base.ixx"
         "JSON.ixx"
         "Math.ixx"
-        "MDArray.ixx"
-        "System.ixx")
+        "MDArray.ixx")
 target_link_libraries(System PUBLIC
         Boost::headers
         Boost::json
