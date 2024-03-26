@@ -22,7 +22,8 @@ export namespace std::experimental {
 
 /// Converts a multi-dimensional span to a normal span.
 /// @tparam T The type of elements.
-/// @param values The multi-dimensional span to convert.
+/// @tparam Extents The type of dimensions.
+/// @param values A multi-dimensional span.
 /// @return A normal span of the same elements.
 export template<typename T, typename Extents>
 [[nodiscard]] span<T> ToSpan(mdspan<T, Extents> values) {
