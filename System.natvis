@@ -19,6 +19,7 @@
 
     <Type Name="std::experimental::mdarray&lt;*, *, *, *&gt;">
         <Intrinsic Name="values" Expression="ctr_._Mypair._Myval2"/>
+        <Intrinsic Name="data" Expression="values()._Myfirst"/>
         <Intrinsic Name="size" Expression="values()._Mylast - values()._Myfirst"/>
         <Intrinsic Name="rank" Expression="extents_type::m_rank"/>
         <Intrinsic Name="extents" Expression="map_.__extents"/>
@@ -33,14 +34,14 @@
             <Item Name="[rank]">rank()</Item>
             <ArrayItems Condition="rank() == 1">
                 <Size>size()</Size>
-                <ValuePointer>&amp;ctr_[0]</ValuePointer>
+                <ValuePointer>data()</ValuePointer>
             </ArrayItems>
             <CustomListItems Condition="rank() == 2">
                 <Variable Name="i" InitialValue="0"/>
                 <Size>size()</Size>
                 <Loop>
                     <Break Condition="i == size()"/>
-                    <Item Name="[{i / extent1()},{i % extent1()}]">ctr_[i]</Item>
+                    <Item Name="[{i / extent1()},{i % extent1()}]">data()[i]</Item>
                     <Exec>++i</Exec>
                 </Loop>
             </CustomListItems>
@@ -50,7 +51,7 @@
                 <Loop>
                     <Break Condition="i == size()"/>
                     <Item Name="[{i / (extent1() * extent2())},{(i / extent2()) % extent1()},{i % extent2()}]">
-                        ctr_[i]
+                        data()[i]
                     </Item>
                     <Exec>++i</Exec>
                 </Loop>
