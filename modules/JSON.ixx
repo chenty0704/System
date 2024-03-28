@@ -36,7 +36,7 @@ export template<DescribedStruct T>
     };
 
     T object;
-    using members = describe::describe_members<T, describe::mod_public>;
+    using members = describe::describe_members<T, describe::mod_public | describe::mod_inherited>;
     for (const auto &pair : value.as_object()) {
         const auto key = pair.key();
         const auto &_value = pair.value();
