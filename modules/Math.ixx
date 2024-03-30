@@ -8,25 +8,46 @@ import System.Base;
 
 using namespace std;
 
+template<typename T>
+class scaled_span {
+    span<const T> _values;
+    T _scalar;
+
+public:
+    constexpr scaled_span(span<const T> values, T scalar) noexcept: _values(values), _scalar(scalar) {
+    }
+
+    [[nodiscard]] constexpr int size() const noexcept {
+        return static_cast<int>(_values.size());
+    }
+
+    [[nodiscard]] constexpr T operator[](int index) const noexcept {
+        return _values[index] * _scalar;
+    }
+};
+
 #define VECTOR_TYPES (int, double)
 #define VECTOR_OPERATORS (+, -, *, /)
 
-#define EXPORT_SCALAR_VECTOR_OPERATOR(T, op) \
-    export [[nodiscard]] vector<T> CONCAT(operator, op)(T scalar, span<const T> values) { \
+#define SPAN_TYPE(isScaled, T) IF(NOT(isScaled), span<const T>, scaled_span<T>)
+
+#define EXPORT_SCALAR_VECTOR_OPERATOR(T, op, isScaled) \
+    export [[nodiscard]] vector<T> CONCAT(operator, op)(T scalar, SPAN_TYPE(isScaled, T) values) { \
         vector<T> out(values.size()); \
         for (auto i = 0; i < values.size(); ++i) out[i] = scalar op values[i]; \
         return out; \
     }
 
-#define EXPORT_VECTOR_SCALAR_OPERATOR(T, op) \
-    export [[nodiscard]] vector<T> CONCAT(operator, op)(span<const T> values, T scalar) { \
+#define EXPORT_VECTOR_SCALAR_OPERATOR(T, op, isScaled) \
+    export [[nodiscard]] vector<T> CONCAT(operator, op)(SPAN_TYPE(isScaled, T) values, T scalar) { \
         vector<T> out(values.size()); \
         for (auto i = 0; i < values.size(); ++i) out[i] = values[i] op scalar; \
         return out; \
     }
 
-#define EXPORT_VECTOR_VECTOR_OPERATOR(T, op) \
-    export [[nodiscard]] vector<T> CONCAT(operator, op)(span<const T> values1, span<const T> values2) { \
+#define EXPORT_VECTOR_VECTOR_OPERATOR(T, op, isScaled1, isScaled2) \
+    export [[nodiscard]] vector<T> CONCAT(operator, op)(SPAN_TYPE(isScaled1, T) values1, \
+                                                        SPAN_TYPE(isScaled2, T) values2) { \
         vector<T> out(values1.size()); \
         for (auto i = 0; i < values1.size(); ++i) out[i] = values1[i] op values2[i]; \
         return out; \
@@ -38,17 +59,17 @@ using namespace std;
         return values; \
     }
 
-#define EXPORT_VECTOR_VECTOR_ASSIGNMNET_OPERATOR(T, op) \
-    export span<T> CONCAT(operator, op, =)(span<T> values1, span<const T> values2) { \
+#define EXPORT_VECTOR_VECTOR_ASSIGNMNET_OPERATOR(T, op, isScaled2) \
+    export span<T> CONCAT(operator, op, =)(span<T> values1, SPAN_TYPE(isScaled2, T) values2) { \
         for (auto i = 0; i < values1.size(); ++i) values1[i] CONCAT(op, =) values2[i]; \
         return values1; \
     }
 
-FOR_EACH(EXPORT_SCALAR_VECTOR_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS)
-FOR_EACH(EXPORT_VECTOR_SCALAR_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS)
-FOR_EACH(EXPORT_VECTOR_VECTOR_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS)
+FOR_EACH(EXPORT_SCALAR_VECTOR_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS, (0, 1))
+FOR_EACH(EXPORT_VECTOR_SCALAR_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS, (0, 1))
+FOR_EACH(EXPORT_VECTOR_VECTOR_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS, (0, 1), (0, 1))
 FOR_EACH(EXPORT_VECTOR_SCALAR_ASSIGNMNET_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS)
-FOR_EACH(EXPORT_VECTOR_VECTOR_ASSIGNMNET_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS)
+FOR_EACH(EXPORT_VECTOR_VECTOR_ASSIGNMNET_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS, (0, 1))
 
 /// Provides common math functions.
 namespace Math {
@@ -95,6 +116,22 @@ namespace Math {
     /// @return The least multiple of the base value greater than or equal to the value.
     export [[nodiscard]] double Ceiling(double value, double base) {
         return ceil(value / base) * base;
+    }
+
+    /// Returns a view of a scaled list of values.
+    /// @param values A list of values.
+    /// @param scalar A scalar multipler.
+    /// @return A view of the scaled list of values.
+    export [[nodiscard]] scaled_span<int> Scaled(span<const int> values, int scalar) {
+        return {values, scalar};
+    }
+
+    /// Returns a view of a scaled list of values.
+    /// @param values A list of values.
+    /// @param scalar A scalar multipler.
+    /// @return A view of the scaled list of values.
+    export [[nodiscard]] scaled_span<double> Scaled(span<const double> values, double scalar) {
+        return {values, scalar};
     }
 
     /// Returns the power of a list of values.
