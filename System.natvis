@@ -11,7 +11,8 @@
             <Item Name="[allocator]">_Myvec._Mypair</Item>
             <IndexListItems>
                 <Size>size()</Size>
-                <ValueNode>static_cast&lt;bool&gt;((data()[$i / _EEN_VBITS] &gt;&gt; ($i % _EEN_VBITS)) &amp; 1)
+                <ValueNode>
+                    static_cast&lt;bool&gt;((data()[$i / _EEN_VBITS] &gt;&gt; ($i % _EEN_VBITS)) &amp; 1)
                 </ValueNode>
             </IndexListItems>
         </Expand>

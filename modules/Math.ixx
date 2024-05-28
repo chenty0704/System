@@ -53,13 +53,13 @@ public:
         return out; \
     }
 
-#define EXPORT_VECTOR_SCALAR_ASSIGNMNET_OPERATOR(T, op) \
+#define EXPORT_VECTOR_SCALAR_ASSIGNMENT_OPERATOR(T, op) \
     export span<T> CONCAT(operator, op, =)(span<T> values, T scalar) { \
         for (auto &value : values) value CONCAT(op, =) scalar; \
         return values; \
     }
 
-#define EXPORT_VECTOR_VECTOR_ASSIGNMNET_OPERATOR(T, op, isScaled2) \
+#define EXPORT_VECTOR_VECTOR_ASSIGNMENT_OPERATOR(T, op, isScaled2) \
     export span<T> CONCAT(operator, op, =)(span<T> values1, SPAN_TYPE(isScaled2, T) values2) { \
         for (auto i = 0; i < values1.size(); ++i) values1[i] CONCAT(op, =) values2[i]; \
         return values1; \
@@ -68,8 +68,8 @@ public:
 FOR_EACH(EXPORT_SCALAR_VECTOR_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS, (0, 1))
 FOR_EACH(EXPORT_VECTOR_SCALAR_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS, (0, 1))
 FOR_EACH(EXPORT_VECTOR_VECTOR_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS, (0, 1), (0, 1))
-FOR_EACH(EXPORT_VECTOR_SCALAR_ASSIGNMNET_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS)
-FOR_EACH(EXPORT_VECTOR_VECTOR_ASSIGNMNET_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS, (0, 1))
+FOR_EACH(EXPORT_VECTOR_SCALAR_ASSIGNMENT_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS)
+FOR_EACH(EXPORT_VECTOR_VECTOR_ASSIGNMENT_OPERATOR, VECTOR_TYPES, VECTOR_OPERATORS, (0, 1))
 
 /// Provides common math functions.
 namespace Math {
@@ -90,7 +90,7 @@ namespace Math {
 
     /// Returns the greatest integer less than or equal to a value.
     /// @param value A value to round down.
-    /// @return The grestet integer less than or equal to the value.
+    /// @return The greatest integer less than or equal to the value.
     export [[nodiscard]] int Floor(double value) {
         return static_cast<int>(floor(value));
     }
@@ -120,7 +120,7 @@ namespace Math {
 
     /// Returns a view of a scaled list of values.
     /// @param values A list of values.
-    /// @param scalar A scalar multipler.
+    /// @param scalar A scalar multiplier.
     /// @return A view of the scaled list of values.
     export [[nodiscard]] scaled_span<int> Scaled(span<const int> values, int scalar) {
         return {values, scalar};
@@ -128,7 +128,7 @@ namespace Math {
 
     /// Returns a view of a scaled list of values.
     /// @param values A list of values.
-    /// @param scalar A scalar multipler.
+    /// @param scalar A scalar multiplier.
     /// @return A view of the scaled list of values.
     export [[nodiscard]] scaled_span<double> Scaled(span<const double> values, double scalar) {
         return {values, scalar};
