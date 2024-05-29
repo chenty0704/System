@@ -1,9 +1,8 @@
-// ReSharper disable CppUnusedIncludeDirective
-#pragma warning(disable: 5244)
-
 export module System.Base;
 
 #define _BUILD_STD_MODULE // NOLINT(bugprone-reserved-identifier)
+
+#pragma warning(disable: 5244)
 
 #include <algorithm>
 #include <array>

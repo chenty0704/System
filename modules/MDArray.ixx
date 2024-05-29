@@ -11,16 +11,21 @@ using namespace std;
 using namespace experimental;
 
 export namespace std::experimental {
+    using experimental::default_accessor;
     using experimental::dextents;
     using experimental::dynamic_extent;
     using experimental::extents;
     using experimental::full_extent;
+    using experimental::layout_right;
     using experimental::mdarray;
     using experimental::mdspan;
     using experimental::submdspan;
+
+    template<size_t rank, typename IndexType = size_t>
+    using dims = dextents<IndexType, rank>;
 }
 
-/// Converts a multidimensional span to a normal span.
+/// Flattens a multidimensional span to a normal span.
 /// @tparam T The type of elements.
 /// @tparam Extents The type of dimensions.
 /// @param values A multidimensional span.

@@ -6,9 +6,7 @@ project(System
         HOMEPAGE_URL "https://github.com/chenty0704/System"
         LANGUAGES CXX)
 
-set(Boost_NO_WARN_NEW_VERSIONS ON)
-
-find_package(Boost REQUIRED COMPONENTS json)
+find_package(Boost REQUIRED CONFIG COMPONENTS json)
 find_package(GTest REQUIRED CONFIG)
 find_package(mdspan REQUIRED CONFIG)
 

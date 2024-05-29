@@ -18,8 +18,8 @@ target_link_libraries(System PUBLIC
         Boost::json
         std::mdspan)
 target_compile_features(System PUBLIC cxx_std_23)
-target_compile_options(System PUBLIC /arch:AVX2 /W4 /WX)
-target_link_options(System PUBLIC /WX)
+target_compile_options(System PUBLIC $<$<CXX_COMPILER_ID:MSVC>:/arch:AVX2 /W4 /WX>)
+target_link_options(System PUBLIC $<$<CXX_COMPILER_ID:MSVC>:/WX>)
 
 install(TARGETS System EXPORT SystemTargets
         FILE_SET HEADERS
