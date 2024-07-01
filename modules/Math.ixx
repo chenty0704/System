@@ -9,12 +9,12 @@ import System.Base;
 using namespace std;
 
 template<typename T>
-class scaled_span {
+class ScaledSpan {
     span<const T> _values;
     T _scalar;
 
 public:
-    constexpr scaled_span(span<const T> values, T scalar) noexcept: _values(values), _scalar(scalar) {
+    constexpr ScaledSpan(span<const T> values, T scalar) noexcept: _values(values), _scalar(scalar) {
     }
 
     [[nodiscard]] constexpr int size() const noexcept {
@@ -29,7 +29,7 @@ public:
 #define VECTOR_TYPES (int, double)
 #define VECTOR_OPERATORS (+, -, *, /)
 
-#define SPAN_TYPE(isScaled, T) IF(NOT(isScaled), span<const T>, scaled_span<T>)
+#define SPAN_TYPE(isScaled, T) IF(NOT(isScaled), span<const T>, ScaledSpan<T>)
 
 #define EXPORT_SCALAR_VECTOR_OPERATOR(T, op, isScaled) \
     export [[nodiscard]] vector<T> CONCAT(operator, op)(T scalar, SPAN_TYPE(isScaled, T) values) { \
@@ -122,7 +122,7 @@ namespace Math {
     /// @param values A list of values.
     /// @param scalar A scalar multiplier.
     /// @return A view of the scaled list of values.
-    export [[nodiscard]] scaled_span<int> Scaled(span<const int> values, int scalar) {
+    export [[nodiscard]] ScaledSpan<int> Scaled(span<const int> values, int scalar) {
         return {values, scalar};
     }
 
@@ -130,16 +130,66 @@ namespace Math {
     /// @param values A list of values.
     /// @param scalar A scalar multiplier.
     /// @return A view of the scaled list of values.
-    export [[nodiscard]] scaled_span<double> Scaled(span<const double> values, double scalar) {
+    export [[nodiscard]] ScaledSpan<double> Scaled(span<const double> values, double scalar) {
         return {values, scalar};
     }
 
-    /// Returns the power of a list of values.
+    /// Returns the absolute value.
+    /// @param value A value.
+    /// @return The absolute value.
+    export [[nodiscard]] int Abs(int value) {
+        return abs(value);
+    }
+
+    /// Returns the absolute value.
+    /// @param value A value.
+    /// @return The absolute value.
+    export [[nodiscard]] double Abs(double value) {
+        return abs(value);
+    }
+
+    /// Returns the absolute values.
+    /// @param values A list of values.
+    /// @return The absolute values.
+    export [[nodiscard]] vector<int> Abs(span<const int> values) {
+        return values | views::transform([](int value) { return Abs(value); }) | ranges::to<vector>();
+    }
+
+    /// Returns the absolute values.
+    /// @param values A list of values.
+    /// @return The absolute values.
+    export [[nodiscard]] vector<double> Abs(span<const double> values) {
+        return values | views::transform([](double value) { return Abs(value); }) | ranges::to<vector>();
+    }
+
+    /// Returns the power of a value.
+    /// @param value A value to be raised.
+    /// @param exponent The exponent.
+    /// @return The power of the value.
+    export [[nodiscard]] double Power(double value, double exponent) {
+        return pow(value, exponent);
+    }
+
+    /// Returns the powers of a list of values.
     /// @param values A list of values.
     /// @param exponent The exponent.
-    /// @return The power of the list of values.
+    /// @return The powers of the list of values.
     export [[nodiscard]] vector<double> Power(span<const double> values, double exponent) {
-        return values | views::transform([&](double value) { return pow(value, exponent); }) | ranges::to<vector>();
+        return values | views::transform([&](double value) { return Power(value, exponent); }) | ranges::to<vector>();
+    }
+
+    /// Returns the natural logarithm of a value.
+    /// @param value A value to find logarithm of.
+    /// @return The natural logarithm of a value.
+    export [[nodiscard]] double Log(double value) {
+        return log(value);
+    }
+
+    /// Returns the natural logarithms of a list of values.
+    /// @param values A list of values.
+    /// @return The natural logarithms of a list of values.
+    export [[nodiscard]] vector<double> Log(span<const double> values) {
+        return values | views::transform([](double value) { return Log(value); }) | ranges::to<vector>();
     }
 
     /// Returns the total of a list of values.
@@ -170,6 +220,19 @@ namespace Math {
     /// @return The dot product between the two lists of values.
     export [[nodiscard]] double Dot(span<const double> values1, span<const double> values2) {
         return transform_reduce(values1.begin(), values1.end(), values2.begin(), 0.);
+    }
+
+    /// Returns the sum of a function over an index range.
+    /// @tparam Fun The type of the function.
+    /// @param begin The beginning index.
+    /// @param end The ending index.
+    /// @param fun A function to sum over.
+    /// @return The sum of the function over the index range.
+    export template<invocable<int> Fun>
+    [[nodiscard]] invoke_result_t<Fun, int> Sum(int begin, int end, Fun fun) {
+        auto sum = invoke_result_t<Fun, int>();
+        for (auto i = begin; i < end; ++i) sum += fun(i);
+        return sum;
     }
 
     /// Returns the mean of a list of values.
