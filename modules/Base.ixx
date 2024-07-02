@@ -4,6 +4,7 @@ export module System.Base;
 
 #pragma warning(disable: 5244)
 
+// ReSharper disable CppUnusedIncludeDirective
 #include <algorithm>
 #include <array>
 #include <atomic>
@@ -87,9 +88,36 @@ export module System.Base;
 #include <vector>
 #include <version>
 
+using namespace std;
+using namespace literals;
+
 export {
     using ::int8_t;
     using ::int16_t;
     using ::int32_t;
     using ::int64_t;
+}
+
+/// Measures the execution time of a function.
+/// @tparam Fun The type of the function.
+/// @param fun A function to measure the execution time of.
+/// @return The execution time of the function.
+export template<invocable Fun>
+chrono::duration<double> MeasureTime(Fun fun) {
+    const auto startTime = chrono::high_resolution_clock::now();
+    fun();
+    const auto endTime = chrono::high_resolution_clock::now();
+    return endTime - startTime;
+}
+
+/// Measures the execution time of a function and returns its value.
+/// @tparam Fun The type of the function.
+/// @param fun A function to measure the execution time of.
+/// @return The return value of the function with the execution time.
+export template<invocable Fun>
+pair<invoke_result_t<Fun>, chrono::duration<double>> MeasureTimedValue(Fun fun) {
+    const auto startTime = chrono::high_resolution_clock::now();
+    const auto value = fun();
+    const auto endTime = chrono::high_resolution_clock::now();
+    return {value, endTime - startTime};
 }
