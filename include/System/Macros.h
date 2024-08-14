@@ -5,7 +5,7 @@
 
 /// Stringizes an argument.
 /// @param arg An argument to stringize.
-/// @return The stringized argument.
+/// @returns The stringized argument.
 #define STRINGIZE(arg) BOOST_PP_STRINGIZE(arg)
 
 #define CONCAT_2(arg0, arg1) BOOST_PP_CAT(arg0, arg1)
@@ -14,7 +14,7 @@
 /// Returns the overload implementation for a variadic macro function with a specific number of variadic arguments.
 /// @param FUN A variadic macro function.
 /// @param ... A list of variadic arguments.
-/// @return The overload implementation for the variadic macro function with the specific number of variadic arguments.
+/// @returns The overload implementation for the variadic macro function with the specific number of variadic arguments.
 #define OVERLOAD(FUN, ...) BOOST_PP_OVERLOAD(CONCAT_2(FUN, _), __VA_ARGS__)
 
 /// Returns a value.
@@ -23,31 +23,31 @@
 
 /// Concatenates a list of arguments.
 /// @param ... A list of arguments to concatenate.
-/// @return The concatenated value.
+/// @returns The concatenated value.
 #define CONCAT(...) RETURN(OVERLOAD(CONCAT, __VA_ARGS__)(__VA_ARGS__))
 
 /// Negates a value.
 /// @param value A value to negate.
-/// @return The negated value.
+/// @returns The negated value.
 #define NOT(value) BOOST_PP_NOT(value)
 
 /// Returns whether the first value is less than the second value.
 /// @param left The first value.
 /// @param right The second value.
-/// @return Whether the first value is less than the second value.
+/// @returns Whether the first value is less than the second value.
 #define LESS(left, right) BOOST_PP_LESS(left, right)
 
 /// Returns whether the first value is greater than the second value.
 /// @param left The first value.
 /// @param right The second value.
-/// @return Whether the first value is greater than the second value.
+/// @returns Whether the first value is greater than the second value.
 #define GREATER(left, right) BOOST_PP_GREATER(left, right)
 
 /// Returns one of two values based on a condition.
 /// @param condition The test condition.
 /// @param trueValue The return value if the condition is true.
 /// @param falseValue The return value if the condition is false.
-/// @return One of the two values based on the condition.
+/// @returns One of the two values based on the condition.
 #define IF(condition, trueValue, falseValue) BOOST_PP_IF(condition, trueValue, falseValue)
 
 #define DECREMENT(value) BOOST_PP_DEC(value)

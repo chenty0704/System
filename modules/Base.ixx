@@ -101,23 +101,23 @@ export {
 /// Measures the execution time of a function.
 /// @tparam Fun The type of the function.
 /// @param fun A function to measure the execution time of.
-/// @return The execution time of the function.
+/// @returns The execution time of the function.
 export template<invocable Fun>
 chrono::duration<double> MeasureTime(Fun fun) {
-    const auto startTime = chrono::high_resolution_clock::now();
+    const auto beginTime = chrono::high_resolution_clock::now();
     fun();
     const auto endTime = chrono::high_resolution_clock::now();
-    return endTime - startTime;
+    return endTime - beginTime;
 }
 
 /// Measures the execution time of a function and returns its value.
 /// @tparam Fun The type of the function.
 /// @param fun A function to measure the execution time of.
-/// @return The return value of the function with the execution time.
+/// @returns The return value of the function with the execution time.
 export template<invocable Fun>
 pair<invoke_result_t<Fun>, chrono::duration<double>> MeasureTimedValue(Fun fun) {
-    const auto startTime = chrono::high_resolution_clock::now();
+    const auto beginTime = chrono::high_resolution_clock::now();
     const auto value = fun();
     const auto endTime = chrono::high_resolution_clock::now();
-    return {value, endTime - startTime};
+    return {value, endTime - beginTime};
 }

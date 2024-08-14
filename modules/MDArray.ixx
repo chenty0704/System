@@ -1,6 +1,6 @@
 module;
 
-#pragma warning(disable: 4267)
+#pragma warning(disable: 4267 4297)
 
 #include <experimental/mdarray>
 #include <experimental/mdspan>
@@ -29,7 +29,7 @@ export namespace std::experimental {
 /// @tparam T The type of elements.
 /// @tparam Extents The type of dimensions.
 /// @param values A multidimensional span.
-/// @return A normal span of the same elements.
+/// @returns A normal span of the same elements.
 export template<typename T, typename Extents>
 [[nodiscard]] span<T> ToSpan(mdspan<T, Extents> values) {
     return {values.data_handle(), values.size()};

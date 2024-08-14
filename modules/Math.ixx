@@ -75,7 +75,7 @@ FOR_EACH(EXPORT_VECTOR_VECTOR_ASSIGNMENT_OPERATOR, VECTOR_TYPES, VECTOR_OPERATOR
 namespace Math {
     /// Returns the integer closest to a value.
     /// @param value A value to round.
-    /// @return The integer closes to the value.
+    /// @returns The integer closes to the value.
     export [[nodiscard]] int Round(double value) {
         return lround(value);
     }
@@ -83,14 +83,14 @@ namespace Math {
     /// Rounds a value to the nearest multiple of a base value.
     /// @param value A value to round.
     /// @param base A base value.
-    /// @return The nearest multiple of the base value.
+    /// @returns The nearest multiple of the base value.
     export [[nodiscard]] double Round(double value, double base) {
         return round(value / base) * base;
     }
 
     /// Returns the greatest integer less than or equal to a value.
     /// @param value A value to round down.
-    /// @return The greatest integer less than or equal to the value.
+    /// @returns The greatest integer less than or equal to the value.
     export [[nodiscard]] int Floor(double value) {
         return static_cast<int>(floor(value));
     }
@@ -98,14 +98,14 @@ namespace Math {
     /// Rounds a value down to the nearest multiple of a base value.
     /// @param value A value to round down.
     /// @param base A base value.
-    /// @return The greatest multiple of the base value less than or equal to the value.
+    /// @returns The greatest multiple of the base value less than or equal to the value.
     export [[nodiscard]] double Floor(double value, double base) {
         return floor(value / base) * base;
     }
 
     /// Returns the least integer greater than or equal to a value.
     /// @param value A value to round up.
-    /// @return The least integer greater than or equal to the value.
+    /// @returns The least integer greater than or equal to the value.
     export [[nodiscard]] int Ceiling(double value) {
         return static_cast<int>(ceil(value));
     }
@@ -113,7 +113,7 @@ namespace Math {
     /// Rounds a value up to the nearest multiple of a base value.
     /// @param value A value to round up.
     /// @param base A base value.
-    /// @return The least multiple of the base value greater than or equal to the value.
+    /// @returns The least multiple of the base value greater than or equal to the value.
     export [[nodiscard]] double Ceiling(double value, double base) {
         return ceil(value / base) * base;
     }
@@ -121,7 +121,7 @@ namespace Math {
     /// Returns a view of a scaled list of values.
     /// @param values A list of values.
     /// @param scalar A scalar multiplier.
-    /// @return A view of the scaled list of values.
+    /// @returns A view of the scaled list of values.
     export [[nodiscard]] ScaledSpan<int> Scaled(span<const int> values, int scalar) {
         return {values, scalar};
     }
@@ -129,35 +129,35 @@ namespace Math {
     /// Returns a view of a scaled list of values.
     /// @param values A list of values.
     /// @param scalar A scalar multiplier.
-    /// @return A view of the scaled list of values.
+    /// @returns A view of the scaled list of values.
     export [[nodiscard]] ScaledSpan<double> Scaled(span<const double> values, double scalar) {
         return {values, scalar};
     }
 
     /// Returns the absolute value.
     /// @param value A value.
-    /// @return The absolute value.
+    /// @returns The absolute value.
     export [[nodiscard]] int Abs(int value) {
         return abs(value);
     }
 
     /// Returns the absolute value.
     /// @param value A value.
-    /// @return The absolute value.
+    /// @returns The absolute value.
     export [[nodiscard]] double Abs(double value) {
         return abs(value);
     }
 
     /// Returns the absolute values.
     /// @param values A list of values.
-    /// @return The absolute values.
+    /// @returns The absolute values.
     export [[nodiscard]] vector<int> Abs(span<const int> values) {
         return values | views::transform([](int value) { return Abs(value); }) | ranges::to<vector>();
     }
 
     /// Returns the absolute values.
     /// @param values A list of values.
-    /// @return The absolute values.
+    /// @returns The absolute values.
     export [[nodiscard]] vector<double> Abs(span<const double> values) {
         return values | views::transform([](double value) { return Abs(value); }) | ranges::to<vector>();
     }
@@ -165,61 +165,61 @@ namespace Math {
     /// Returns the power of a value.
     /// @param value A value to be raised.
     /// @param exponent The exponent.
-    /// @return The power of the value.
-    export [[nodiscard]] double Power(double value, double exponent) {
+    /// @returns The power of the value.
+    export [[nodiscard]] double Pow(double value, double exponent) {
         return pow(value, exponent);
     }
 
     /// Returns the powers of a list of values.
     /// @param values A list of values.
     /// @param exponent The exponent.
-    /// @return The powers of the list of values.
-    export [[nodiscard]] vector<double> Power(span<const double> values, double exponent) {
-        return values | views::transform([&](double value) { return Power(value, exponent); }) | ranges::to<vector>();
+    /// @returns The powers of the list of values.
+    export [[nodiscard]] vector<double> Pow(span<const double> values, double exponent) {
+        return values | views::transform([&](double value) { return Pow(value, exponent); }) | ranges::to<vector>();
     }
 
     /// Returns the natural logarithm of a value.
     /// @param value A value to find logarithm of.
-    /// @return The natural logarithm of a value.
+    /// @returns The natural logarithm of a value.
     export [[nodiscard]] double Log(double value) {
         return log(value);
     }
 
     /// Returns the natural logarithms of a list of values.
     /// @param values A list of values.
-    /// @return The natural logarithms of a list of values.
+    /// @returns The natural logarithms of a list of values.
     export [[nodiscard]] vector<double> Log(span<const double> values) {
         return values | views::transform([](double value) { return Log(value); }) | ranges::to<vector>();
     }
 
     /// Returns the total of a list of values.
     /// @param values A list of values.
-    /// @return The total of the list of values.
+    /// @returns The total of the list of values.
     export [[nodiscard]] int Total(span<const int> values) {
-        return reduce(values.begin(), values.end());
+        return reduce(values.cbegin(), values.cend());
     }
 
     /// Returns the total of a list of values.
     /// @param values A list of values.
-    /// @return The total of the list of values.
+    /// @returns The total of the list of values.
     export [[nodiscard]] double Total(span<const double> values) {
-        return reduce(values.begin(), values.end());
+        return reduce(values.cbegin(), values.cend());
     }
 
     /// Returns the dot product between the two lists of values.
     /// @param values1 The first list of values.
     /// @param values2 The second list of values.
-    /// @return The dot product between the two lists of values.
+    /// @returns The dot product between the two lists of values.
     export [[nodiscard]] int Dot(span<const int> values1, span<const int> values2) {
-        return transform_reduce(values1.begin(), values1.end(), values2.begin(), 0);
+        return transform_reduce(values1.cbegin(), values1.cend(), values2.cbegin(), 0);
     }
 
     /// Returns the dot product between the two lists of values.
     /// @param values1 The first list of values.
     /// @param values2 The second list of values.
-    /// @return The dot product between the two lists of values.
+    /// @returns The dot product between the two lists of values.
     export [[nodiscard]] double Dot(span<const double> values1, span<const double> values2) {
-        return transform_reduce(values1.begin(), values1.end(), values2.begin(), 0.);
+        return transform_reduce(values1.cbegin(), values1.cend(), values2.cbegin(), 0.);
     }
 
     /// Returns the sum of a function over an index range.
@@ -227,7 +227,7 @@ namespace Math {
     /// @param begin The beginning index.
     /// @param end The ending index.
     /// @param fun A function to sum over.
-    /// @return The sum of the function over the index range.
+    /// @returns The sum of the function over the index range.
     export template<invocable<int> Fun>
     [[nodiscard]] invoke_result_t<Fun, int> Sum(int begin, int end, Fun fun) {
         auto sum = invoke_result_t<Fun, int>();
@@ -237,7 +237,7 @@ namespace Math {
 
     /// Returns the mean of a list of values.
     /// @param values A list of values.
-    /// @return The mean of the list of values.
+    /// @returns The mean of the list of values.
     export [[nodiscard]] double Mean(span<const double> values) {
         return Total(values) / static_cast<double>(values.size());
     }
@@ -245,7 +245,7 @@ namespace Math {
     /// Returns the variance of a list of values given its mean.
     /// @param values A list of values.
     /// @param mean The mean of the list of values.
-    /// @return The variance of list of values.
+    /// @returns The variance of list of values.
     export [[nodiscard]] double Variance(span<const double> values, double mean) {
         auto buffer = values - mean;
         buffer *= buffer;
@@ -254,7 +254,7 @@ namespace Math {
 
     /// Returns the variance of a list of values.
     /// @param values A list of values.
-    /// @return The variance of the list of values.
+    /// @returns The variance of the list of values.
     export [[nodiscard]] double Variance(span<const double> values) {
         return Variance(values, Mean(values));
     }
@@ -264,7 +264,7 @@ namespace Math {
     /// @param values2 The second list of values.
     /// @param mean1 The mean of the first list of values.
     /// @param mean2 The mean of the seconds list of values.
-    /// @return The covariance between the two lists of values
+    /// @returns The covariance between the two lists of values
     export [[nodiscard]] double Covariance(span<const double> values1, span<const double> values2,
                                            double mean1, double mean2) {
         const auto buffer1 = values1 - mean1, buffer2 = values2 - mean2;
@@ -274,7 +274,7 @@ namespace Math {
     /// Returns the covariance between two lists of values.
     /// @param values1 The first list of values.
     /// @param values2 The second list of values.
-    /// @return The covariance between the two lists of values.
+    /// @returns The covariance between the two lists of values.
     export [[nodiscard]] double Covariance(span<const double> values1, span<const double> values2) {
         return Covariance(values1, values2, Mean(values1), Mean(values2));
     }

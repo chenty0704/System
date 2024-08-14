@@ -61,7 +61,7 @@ export template<DescribedStruct T>
 namespace JSON {
     /// Returns a JSON representation of an object.
     /// @param object The object to serialize.
-    /// @return A JSON representation of the object.
+    /// @returns A JSON representation of the object.
     export [[nodiscard]] string Serialize(const auto &object) {
         return json::serialize(json::value_from(object));
     }
@@ -69,7 +69,7 @@ namespace JSON {
     /// Recovers an object from a JSON representation.
     /// @tparam T The type of the object.
     /// @param value The JSON representation.
-    /// @return The recovered object from the JSON representation.
+    /// @returns The recovered object from the JSON representation.
     export template<typename T>
     [[nodiscard]] T Deserialize(string_view value) {
         return json::value_to<T>(json::parse(value));
