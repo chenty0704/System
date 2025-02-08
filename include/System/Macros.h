@@ -140,67 +140,6 @@
 #define FOR_EACH_3(FUN, values1, values2, values3) BOOST_PP_FOR(FOR_EACH_3_STATE_1(FUN, values1, values2, values3), \
     FOR_EACH_3_CONDITION_1, FOR_EACH_3_ITERATION_1, FOR_EACH_3_STATEMENT_1)
 
-// The implementation for FOR_EACH_4.
-
-#define FOR_EACH_4_STATE_4(FUN, value1, value2, value3, values4) \
-    (FUN, value1, value2, value3, values4, 0, TUPLE_SIZE(values4))
-#define FOR_EACH_4_CONDITION_4_IMPL(l, size4) LESS(l, size4)
-#define FOR_EACH_4_CONDITION_4(r, state) FOR_EACH_4_CONDITION_4_IMPL(TUPLE_AT(state, 5), TUPLE_AT(state, 6))
-#define FOR_EACH_4_ITERATION_4_IMPL(FUN, value1, value2, value3, values4, l, size4) \
-    (FUN, value1, value2, value3, values4, INCREMENT(l), size4)
-#define FOR_EACH_4_ITERATION_4(r, state) FOR_EACH_4_ITERATION_4_IMPL(TUPLE_AT(state, 0), TUPLE_AT(state, 1), \
-    TUPLE_AT(state, 2), TUPLE_AT(state, 3), TUPLE_AT(state, 4), TUPLE_AT(state, 5), TUPLE_AT(state, 6))
-#define FOR_EACH_4_STATEMENT_4_IMPL(FUN, value1, value2, value3, values4, l) \
-    FUN(value1, value2, value3, TUPLE_AT(values4, l))
-#define FOR_EACH_4_STATEMENT_4(r, state) FOR_EACH_4_STATEMENT_4_IMPL(TUPLE_AT(state, 0), TUPLE_AT(state, 1), \
-    TUPLE_AT(state, 2), TUPLE_AT(state, 3), TUPLE_AT(state, 4), TUPLE_AT(state, 5))
-
-#define FOR_EACH_4_STATE_3(FUN, value1, value2, values3, values4) \
-    (FUN, value1, value2, values3, values4, 0, TUPLE_SIZE(values3))
-#define FOR_EACH_4_CONDITION_3_IMPL(k, size3) LESS(k, size3)
-#define FOR_EACH_4_CONDITION_3(r, state) FOR_EACH_3_CONDITION_3_IMPL(TUPLE_AT(state, 5), TUPLE_AT(state, 6))
-#define FOR_EACH_4_ITERATION_3_IMPL(FUN, value1, value2, values3, values4, k, size3) \
-    (FUN, value1, value2, values3, values4, INCREMENT(k), size3)
-#define FOR_EACH_4_ITERATION_3(r, state) FOR_EACH_4_ITERATION_3_IMPL(TUPLE_AT(state, 0), TUPLE_AT(state, 1), \
-    TUPLE_AT(state, 2), TUPLE_AT(state, 3), TUPLE_AT(state, 4), TUPLE_AT(state, 5), TUPLE_AT(state, 6))
-#define FOR_EACH_4_STATEMENT_3_IMPL(FUN, value1, value2, values3, values4, k) \
-    BOOST_PP_FOR(FOR_EACH_4_STATE_4(FUN, value1, value2, TUPLE_AT(values3, k), values4), \
-                 FOR_EACH_4_CONDITION_4, FOR_EACH_4_ITERATION_4, FOR_EACH_4_STATEMENT_4)
-#define FOR_EACH_4_STATEMENT_3(r, state) FOR_EACH_4_STATEMENT_3_IMPL(TUPLE_AT(state, 0), TUPLE_AT(state, 1), \
-    TUPLE_AT(state, 2), TUPLE_AT(state, 3), TUPLE_AT(state, 4), TUPLE_AT(state, 5))
-
-#define FOR_EACH_4_STATE_2(FUN, value1, values2, values3, values4) \
-    (FUN, value1, values2, values3, values4, 0, TUPLE_SIZE(values2))
-#define FOR_EACH_4_CONDITION_2_IMPL(j, size2) LESS(j, size2)
-#define FOR_EACH_4_CONDITION_2(r, state) FOR_EACH_4_CONDITION_2_IMPL(TUPLE_AT(state, 5), TUPLE_AT(state, 6))
-#define FOR_EACH_4_ITERATION_2_IMPL(FUN, value1, values2, values3, values4, j, size2) \
-    (FUN, value1, values2, values3, values4, INCREMENT(j), size2)
-#define FOR_EACH_4_ITERATION_2(r, state) FOR_EACH_4_ITERATION_2_IMPL(TUPLE_AT(state, 0), TUPLE_AT(state, 1), \
-    TUPLE_AT(state, 2), TUPLE_AT(state, 3), TUPLE_AT(state, 4), TUPLE_AT(state, 5), TUPLE_AT(state, 6))
-#define FOR_EACH_4_STATEMENT_2_IMPL(FUN, value1, values2, values3, values4, j) \
-    BOOST_PP_FOR(FOR_EACH_4_STATE_3(FUN, value1, TUPLE_AT(values2, j), values3, values4), \
-                 FOR_EACH_4_CONDITION_3, FOR_EACH_4_ITERATION_3, FOR_EACH_4_STATEMENT_3)
-#define FOR_EACH_4_STATEMENT_2(r, state) FOR_EACH_4_STATEMENT_2_IMPL(TUPLE_AT(state, 0), TUPLE_AT(state, 1), \
-    TUPLE_AT(state, 2), TUPLE_AT(state, 3), TUPLE_AT(state, 4), TUPLE_AT(state, 5))
-
-#define FOR_EACH_4_STATE_1(FUN, values1, values2, values3, values4) \
-    (FUN, values1, values2, values3, values4, 0, TUPLE_SIZE(values1))
-#define FOR_EACH_4_CONDITION_1_IMPL(i, size1) LESS(i, size1)
-#define FOR_EACH_4_CONDITION_1(r, state) FOR_EACH_4_CONDITION_1_IMPL(TUPLE_AT(state, 5), TUPLE_AT(state, 6))
-#define FOR_EACH_4_ITERATION_1_IMPL(FUN, values1, values2, values3, values4, i, size1) \
-    (FUN, values1, values2, values3, values4, INCREMENT(i), size1)
-#define FOR_EACH_4_ITERATION_1(r, state) FOR_EACH_4_ITERATION_1_IMPL(TUPLE_AT(state, 0), TUPLE_AT(state, 1), \
-    TUPLE_AT(state, 2), TUPLE_AT(state, 3), TUPLE_AT(state, 4), TUPLE_AT(state, 5), TUPLE_AT(state, 6))
-#define FOR_EACH_4_STATEMENT_1_IMPL(FUN, values1, values2, values3, values4, i) \
-    BOOST_PP_FOR(FOR_EACH_4_STATE_2(FUN, TUPLE_AT(values1, i), values2, values3, values4), \
-                 FOR_EACH_4_CONDITION_2, FOR_EACH_4_ITERATION_2, FOR_EACH_4_STATEMENT_2)
-#define FOR_EACH_4_STATEMENT_1(r, state) FOR_EACH_4_STATEMENT_1_IMPL(TUPLE_AT(state, 0), TUPLE_AT(state, 1), \
-    TUPLE_AT(state, 2), TUPLE_AT(state, 3), TUPLE_AT(state, 4), TUPLE_AT(state, 5))
-
-#define FOR_EACH_4(FUN, values1, values2, values3, values4) \
-    BOOST_PP_FOR(FOR_EACH_4_STATE_1(FUN, values1, values2, values3, values4), \
-                 FOR_EACH_4_CONDITION_1, FOR_EACH_4_ITERATION_1, FOR_EACH_4_STATEMENT_1)
-
 /// Applies a macro function to each tuple in the Cartesian product of the lists of values.
 /// @param FUN A macro function.
 /// @param ... Lists of values.
