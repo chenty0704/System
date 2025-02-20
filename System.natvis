@@ -60,13 +60,13 @@
         </Expand>
     </Type>
 
-    <Type Name="std::experimental::mdspan&lt;*, *, *, *&gt;">
-        <Intrinsic Name="data" Expression="__members.__t_val"/>
+    <Type Name="std::mdspan&lt;*, *, *, *&gt;">
+        <Intrinsic Name="data" Expression="__members.__t1_val"/>
         <Intrinsic Name="size1" Expression="extent0()"/>
         <Intrinsic Name="size2" Expression="extent0() * extent1()"/>
         <Intrinsic Name="size3" Expression="extent0() * extent1() * extent2()"/>
         <Intrinsic Name="rank" Expression="extents_type::m_rank"/>
-        <Intrinsic Name="extents" Expression="__members.__u_val.__t_val.__extents"/>
+        <Intrinsic Name="extents" Expression="__members.__t2_val.__t1_val.__extents"/>
         <Intrinsic Name="extent0" Expression="extents().m_vals.m_dyn_vals.vals[0]"/>
         <Intrinsic Name="extent1" Expression="extents().m_vals.m_dyn_vals.vals[1]"/>
         <Intrinsic Name="extent2" Expression="extents().m_vals.m_dyn_vals.vals[2]"/>
