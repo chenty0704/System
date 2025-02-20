@@ -1,36 +1,24 @@
 module;
 
-#pragma warning(disable: 4267 4297)
+#define MDSPAN_IMPL_STANDARD_NAMESPACE std
+#define MDSPAN_IMPL_PROPOSED_NAMESPACE experimental
 
-#include <experimental/mdarray>
-#include <experimental/mdspan>
+#include <mdspan/mdarray.hpp>
 
 export module System.MDArray;
 
 using namespace std;
 using namespace experimental;
 
-export namespace std::experimental {
-    using experimental::default_accessor;
-    using experimental::dextents;
-    using experimental::dynamic_extent;
-    using experimental::extents;
-    using experimental::full_extent;
-    using experimental::layout_right;
-    using experimental::mdarray;
-    using experimental::mdspan;
-    using experimental::submdspan;
+export namespace std {
+    using std::dynamic_extent;
+    using std::extents;
+    using std::full_extent;
+    using std::mdspan;
+    using std::submdspan;
 
-    template<size_t rank, typename IndexType = size_t>
-    using dims = dextents<IndexType, rank>;
-}
-
-/// Flattens a multidimensional span to a normal span.
-/// @tparam T The type of elements.
-/// @tparam Extents The type of dimensions.
-/// @param values A multidimensional span.
-/// @returns A normal span of the same elements.
-export template<typename T, typename Extents>
-[[nodiscard]] span<T> ToSpan(mdspan<T, Extents> values) {
-    return {values.data_handle(), values.size()};
+    namespace experimental {
+        using experimental::dims;
+        using experimental::mdarray;
+    }
 }

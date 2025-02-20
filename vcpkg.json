@@ -12,5 +12,6 @@
         {"name": "boost-preprocessor"},
         {"name": "gtest"},
         {"name": "mdspan"}
-    ]
+    ],
+    "builtin-baseline": "a8f9244fbcb04d6059ba825d843b34d29a1a8c39"
 }
