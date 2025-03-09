@@ -13,7 +13,5 @@ find_package(mdspan REQUIRED CONFIG)
 add_subdirectory("modules")
 add_subdirectory("tests")
 
-install(FILES
-        "cmake/SystemConfig.cmake"
-        "System.natvis"
+install(FILES "cmake/SystemConfig.cmake"
         DESTINATION "share/System")
