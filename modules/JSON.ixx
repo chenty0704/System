@@ -1,5 +1,7 @@
 module;
 
+#pragma warning(disable: 4275)
+
 #include <boost/describe.hpp>
 #include <boost/json.hpp>
 

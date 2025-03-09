@@ -1,10 +1,16 @@
+// ReSharper disable CppUnusedIncludeDirective
+
+module;
+
+#include <xmmintrin.h>
+
 export module System.Base;
 
-#define _BUILD_STD_MODULE // NOLINT(bugprone-reserved-identifier)
+#pragma warning(disable: 4834 5244)
 
-#pragma warning(disable: 5244)
+#define _BUILD_STD_MODULE
+#define _FSTREAM_SUPPORTS_EXPERIMENTAL_FILESYSTEM false
 
-// ReSharper disable CppUnusedIncludeDirective
 #include <algorithm>
 #include <array>
 #include <atomic>
