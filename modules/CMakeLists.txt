@@ -16,7 +16,7 @@ target_sources(System PUBLIC
 target_link_libraries(System PUBLIC
         Boost::headers
         Boost::json
-        std::mdspan)
+        mdspan::mdspan)
 target_compile_features(System PUBLIC cxx_std_23)
 target_compile_options(System PUBLIC /W4 /WX /arch:AVX2)
 target_link_options(System PUBLIC /WX)
