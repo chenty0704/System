@@ -10,6 +10,16 @@ using namespace std;
 
 #define VECTOR_OPERATORS (+, -, *, /)
 
+#define EXPORT_SCALAR_VECTOR_OPERATOR(op) \
+    export template<typename Range> requires ranges::contiguous_range<Range> && ranges::sized_range<Range> \
+    [[nodiscard]] vector<ranges::range_value_t<Range>> \
+    CONCAT(operator, op)(ranges::range_value_t<Range> scalar, const Range &values) { \
+        using T = ranges::range_value_t<Range>; \
+        vector<T> out(ranges::size(values)); \
+        for (auto i = 0; i < ranges::size(values); ++i) out[i] = scalar op values[i]; \
+        return out; \
+    }
+
 #define EXPORT_VECTOR_SCALAR_OPERATOR(op) \
     export template<typename Range> requires ranges::contiguous_range<Range> && ranges::sized_range<Range> \
     [[nodiscard]] vector<ranges::range_value_t<Range>> \
@@ -20,34 +30,47 @@ using namespace std;
         return out; \
     }
 
-#define EXPORT_VECTOR_VECTOR_OPERATOR(op) \
+#define EXPORT_VECTOR_SCALAR_ASSIGNMENT_OPERATOR(op) \
     export template<typename Range> requires ranges::contiguous_range<Range> && ranges::sized_range<Range> \
-    [[nodiscard]] vector<ranges::range_value_t<Range>> \
-    CONCAT(operator, op)(const Range &values1, const Range &values2) { \
-        using T = ranges::range_value_t<Range>; \
+    Range &CONCAT(operator, op, =)(Range &values, ranges::range_value_t<Range> scalar) { \
+        for (auto &value : values) value CONCAT(op, =) scalar; \
+        return values; \
+    }
+
+#define EXPORT_VECTOR_VECTOR_OPERATOR(op) \
+    export template<typename Range1, typename Range2> \
+        requires ranges::contiguous_range<Range1> && ranges::sized_range<Range1> \
+        && ranges::contiguous_range<Range2> && ranges::sized_range<Range2> \
+    [[nodiscard]] vector<ranges::range_value_t<Range1>> \
+    CONCAT(operator, op)(const Range1 &values1, const Range2 &values2) { \
+        using T = ranges::range_value_t<Range1>; \
         vector<T> out(ranges::size(values1)); \
         for (auto i = 0; i < ranges::size(values1); ++i) out[i] = values1[i] op values2[i]; \
         return out; \
     }
 
-#define EXPORT_VECTOR_SCALAR_ASSIGNMENT_OPERATOR(op) \
-    export template<typename Range> requires ranges::contiguous_range<Range> && ranges::sized_range<Range> \
-    span<ranges::range_value_t<Range>> CONCAT(operator, op, =)(Range &values, ranges::range_value_t<Range> scalar) { \
-        for (auto &value : values) value CONCAT(op, =) scalar; \
-        return values; \
-    }
-
 #define EXPORT_VECTOR_VECTOR_ASSIGNMENT_OPERATOR(op) \
-    export template<typename Range> requires ranges::contiguous_range<Range> && ranges::sized_range<Range> \
-    span<ranges::range_value_t<Range>> CONCAT(operator, op, =)(Range &values1, const Range &values2) { \
+    export template<typename Range1, typename Range2> \
+        requires ranges::contiguous_range<Range1> && ranges::sized_range<Range1> \
+        && ranges::contiguous_range<Range2> && ranges::sized_range<Range2> \
+    Range1 &CONCAT(operator, op, =)(Range1 &values1, const Range2 &values2) { \
         for (auto i = 0; i < ranges::size(values1); ++i) values1[i] CONCAT(op, =) values2[i]; \
         return values1; \
     }
 
+FOR_EACH(EXPORT_SCALAR_VECTOR_OPERATOR, VECTOR_OPERATORS)
 FOR_EACH(EXPORT_VECTOR_SCALAR_OPERATOR, VECTOR_OPERATORS)
-FOR_EACH(EXPORT_VECTOR_VECTOR_OPERATOR, VECTOR_OPERATORS)
 FOR_EACH(EXPORT_VECTOR_SCALAR_ASSIGNMENT_OPERATOR, VECTOR_OPERATORS)
-FOR_EACH(EXPORT_VECTOR_VECTOR_ASSIGNMENT_OPERATOR, VECTOR_OPERATORS)
+
+EXPORT_VECTOR_VECTOR_OPERATOR(+)
+EXPORT_VECTOR_VECTOR_OPERATOR(-)
+EXPORT_VECTOR_VECTOR_OPERATOR(*)
+EXPORT_VECTOR_VECTOR_OPERATOR(/)
+
+EXPORT_VECTOR_VECTOR_ASSIGNMENT_OPERATOR(+)
+EXPORT_VECTOR_VECTOR_ASSIGNMENT_OPERATOR(-)
+EXPORT_VECTOR_VECTOR_ASSIGNMENT_OPERATOR(*)
+EXPORT_VECTOR_VECTOR_ASSIGNMENT_OPERATOR(/)
 
 /// Provides common math functions.
 namespace Math {
@@ -113,6 +136,20 @@ namespace Math {
     [[nodiscard]] vector<ranges::range_value_t<Range>> Abs(const Range &values) {
         using T = ranges::range_value_t<Range>;
         return values | views::transform([](T value) { return Abs(value); }) | ranges::to<vector>();
+    }
+
+    /// Returns the square of a value.
+    /// @param value A value to square.
+    /// @returns The square of the value.
+    export [[nodiscard]] double Square(double value) {
+        return value * value;
+    }
+
+    /// Returns the squares of a list of values.
+    /// @param values A list of values.
+    /// @returns The squares of the list of values.
+    export [[nodiscard]] vector<double> Square(span<const double> values) {
+        return values * values;
     }
 
     /// Returns the power of a value.
