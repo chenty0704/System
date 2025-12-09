@@ -2,7 +2,8 @@
 
 #include "System/Macros.h"
 
-using namespace std::literals;
+using namespace std;
+using namespace literals;
 
 TEST(MacrosTest, ForEach) {
     EXPECT_EQ(STRINGIZE(FOR_EACH(INCREMENT, (0, 1, 2, 3))), "1 2 3 4"sv);

@@ -8,6 +8,7 @@ module;
 export module System.JSON;
 
 import System.Base;
+import System.Reflection;
 
 using namespace std;
 namespace describe = boost::describe;
@@ -26,25 +27,19 @@ export namespace boost::json {
     using json::value_to_tag;
 }
 
-/// Represents a described struct.
-export template<typename T>
-concept DescribedStruct = is_class_v<T> && describe::has_describe_members<T>::value &&
-    mp11::mp_empty<describe::describe_members<T, describe::mod_protected | describe::mod_private>>::value;
-
 export template<DescribedStruct T>
-[[nodiscard]] T default_tag_invoke(const json::value_to_tag<T> &, const json::value &value) {
-    static const auto Assign = []<typename M>(M &member, const json::value &_value) {
-        member = json::value_to<M>(_value);
+[[nodiscard]] T tag_invoke(const json::value_to_tag<T> &, const json::value &value) {
+    using Members = describe::describe_members<T, describe::mod_public | describe::mod_inherited>;
+
+    static const auto Assign = []<typename M>(M &member, const json::value &value) {
+        member = json::value_to<M>(value);
     };
 
     T object;
-    using members = describe::describe_members<T, describe::mod_public | describe::mod_inherited>;
-    for (const auto &pair : value.as_object()) {
-        const auto key = pair.key();
-        const auto &_value = pair.value();
+    for (const auto &[key, _value] : value.as_object()) {
         auto matched = false;
-        mp11::mp_for_each<members>([&](auto member) {
-            if (!matched && key == member.name) {
+        mp11::mp_for_each<Members>([&](auto member) {
+            if (!matched && member.name == key) {
                 Assign(object.*member.pointer, _value);
                 matched = true;
             }
@@ -52,11 +47,6 @@ export template<DescribedStruct T>
         if (!matched) throw runtime_error("Invalid key.");
     }
     return object;
-}
-
-export template<DescribedStruct T>
-[[nodiscard]] T tag_invoke(const json::value_to_tag<T> &tag, const json::value &value) {
-    return default_tag_invoke(tag, value);
 }
 
 /// Provides utilities for JSON conversion.
