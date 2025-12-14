@@ -37,14 +37,14 @@ export template<DescribedStruct T>
 
     T object;
     for (const auto &[key, _value] : value.as_object()) {
-        auto matched = false;
+        auto isMatched = false;
         mp11::mp_for_each<Members>([&](auto member) {
-            if (!matched && member.name == key) {
+            if (!isMatched && member.name == key) {
                 Assign(object.*member.pointer, _value);
-                matched = true;
+                isMatched = true;
             }
         });
-        if (!matched) throw runtime_error("Invalid key.");
+        if (!isMatched) throw runtime_error("Invalid key.");
     }
     return object;
 }
