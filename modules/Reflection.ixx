@@ -20,7 +20,7 @@ concept DescribedStruct = is_class_v<T> && describe::has_describe_members<T>::va
     mp11::mp_empty<describe::describe_members<T, describe::mod_protected | describe::mod_private>>::value;
 
 export template<DescribedStruct T>
-bool operator==(const T &left, const T &right) {
+[[nodiscard]] bool operator==(const T &left, const T &right) {
     using Members = describe::describe_members<T, describe::mod_public | describe::mod_inherited>;
 
     auto result = true;
@@ -31,7 +31,7 @@ bool operator==(const T &left, const T &right) {
 }
 
 export template<DescribedStruct T>
-bool operator!=(const T &left, const T &right) {
+[[nodiscard]] bool operator!=(const T &left, const T &right) {
     return !(left == right);
 }
 
@@ -45,9 +45,9 @@ ostream &operator<<(ostream &stream, const T &object) {
     using Members = describe::describe_members<T, describe::mod_public | describe::mod_inherited>;
 
     stream << "{";
-    auto first = true;
+    auto isFirst = true;
     mp11::mp_for_each<Members>([&](auto member) {
-        if (first) first = false;
+        if (isFirst) isFirst = false;
         else stream << ", ";
         stream << member.name << " = " << object.*member.pointer;
     });
