@@ -45,9 +45,9 @@ ostream &operator<<(ostream &stream, const T &object) {
     using Members = describe::describe_members<T, describe::mod_public | describe::mod_inherited>;
 
     stream << "{";
-    auto first = true;
+    auto isFirst = true;
     mp11::mp_for_each<Members>([&](auto member) {
-        if (first) first = false;
+        if (isFirst) isFirst = false;
         else stream << ", ";
         stream << member.name << " = " << object.*member.pointer;
     });
