@@ -7,7 +7,7 @@ using namespace std;
 TEST(MathTest, BasicVectorOperations) {
     const vector values1 = {1., 2., 3., 4.}, values2 = {5., 6., 7., 8.};
 
-    EXPECT_EQ(values1 * 2., vector({2., 4., 6., 8.}));
+    EXPECT_EQ(values1 * 2, vector({2., 4., 6., 8.}));
     EXPECT_EQ(values1 + values2, vector({6., 8., 10., 12.}));
 }
 
