@@ -8,31 +8,30 @@ import System.Base;
 
 using namespace std;
 
-#define VECTOR_OPERATORS (+, -, *, /)
-
 #define EXPORT_SCALAR_VECTOR_OPERATOR(op) \
-    export template<typename Range> requires ranges::contiguous_range<Range> && ranges::sized_range<Range> \
-    [[nodiscard]] vector<ranges::range_value_t<Range>> \
-    CONCAT(operator, op)(ranges::range_value_t<Range> scalar, const Range &values) { \
-        using T = ranges::range_value_t<Range>; \
-        vector<T> out(ranges::size(values)); \
+    export template<typename T, typename Range> \
+        requires is_arithmetic_v<T> && ranges::contiguous_range<Range> && ranges::sized_range<Range> \
+    [[nodiscard]] auto CONCAT(operator, op)(T scalar, const Range &values) { \
+        using Result = decltype(T() op ranges::range_value_t<Range>()); \
+        vector<Result> out(ranges::size(values)); \
         for (auto i = 0; i < ranges::size(values); ++i) out[i] = scalar op values[i]; \
         return out; \
     }
 
 #define EXPORT_VECTOR_SCALAR_OPERATOR(op) \
-    export template<typename Range> requires ranges::contiguous_range<Range> && ranges::sized_range<Range> \
-    [[nodiscard]] vector<ranges::range_value_t<Range>> \
-    CONCAT(operator, op)(const Range &values, ranges::range_value_t<Range> scalar) { \
-        using T = ranges::range_value_t<Range>; \
-        vector<T> out(ranges::size(values)); \
+    export template<typename Range, typename T> \
+        requires ranges::contiguous_range<Range> && ranges::sized_range<Range> && is_arithmetic_v<T> \
+    [[nodiscard]] auto CONCAT(operator, op)(const Range &values, T scalar) { \
+        using Result = decltype(ranges::range_value_t<Range>() op T()); \
+        vector<Result> out(ranges::size(values)); \
         for (auto i = 0; i < ranges::size(values); ++i) out[i] = values[i] op scalar; \
         return out; \
     }
 
 #define EXPORT_VECTOR_SCALAR_ASSIGNMENT_OPERATOR(op) \
-    export template<typename Range> requires ranges::contiguous_range<Range> && ranges::sized_range<Range> \
-    Range &CONCAT(operator, op, =)(Range &values, ranges::range_value_t<Range> scalar) { \
+    export template<typename Range, typename T> \
+        requires ranges::contiguous_range<Range> && ranges::sized_range<Range> && is_arithmetic_v<T> \
+    Range &CONCAT(operator, op, =)(Range &values, T scalar) { \
         for (auto &value : values) value CONCAT(op, =) scalar; \
         return values; \
     }
@@ -41,10 +40,9 @@ using namespace std;
     export template<typename Range1, typename Range2> \
         requires ranges::contiguous_range<Range1> && ranges::sized_range<Range1> \
         && ranges::contiguous_range<Range2> && ranges::sized_range<Range2> \
-    [[nodiscard]] vector<ranges::range_value_t<Range1>> \
-    CONCAT(operator, op)(const Range1 &values1, const Range2 &values2) { \
-        using T = ranges::range_value_t<Range1>; \
-        vector<T> out(ranges::size(values1)); \
+    [[nodiscard]] auto CONCAT(operator, op)(const Range1 &values1, const Range2 &values2) { \
+        using Result = decltype(ranges::range_value_t<Range1>() op ranges::range_value_t<Range2>()); \
+        vector<Result> out(ranges::size(values1)); \
         for (auto i = 0; i < ranges::size(values1); ++i) out[i] = values1[i] op values2[i]; \
         return out; \
     }
@@ -58,9 +56,20 @@ using namespace std;
         return values1; \
     }
 
-FOR_EACH(EXPORT_SCALAR_VECTOR_OPERATOR, VECTOR_OPERATORS)
-FOR_EACH(EXPORT_VECTOR_SCALAR_OPERATOR, VECTOR_OPERATORS)
-FOR_EACH(EXPORT_VECTOR_SCALAR_ASSIGNMENT_OPERATOR, VECTOR_OPERATORS)
+EXPORT_SCALAR_VECTOR_OPERATOR(+)
+EXPORT_SCALAR_VECTOR_OPERATOR(-)
+EXPORT_SCALAR_VECTOR_OPERATOR(*)
+EXPORT_SCALAR_VECTOR_OPERATOR(/)
+
+EXPORT_VECTOR_SCALAR_OPERATOR(+)
+EXPORT_VECTOR_SCALAR_OPERATOR(-)
+EXPORT_VECTOR_SCALAR_OPERATOR(*)
+EXPORT_VECTOR_SCALAR_OPERATOR(/)
+
+EXPORT_VECTOR_SCALAR_ASSIGNMENT_OPERATOR(+)
+EXPORT_VECTOR_SCALAR_ASSIGNMENT_OPERATOR(-)
+EXPORT_VECTOR_SCALAR_ASSIGNMENT_OPERATOR(*)
+EXPORT_VECTOR_SCALAR_ASSIGNMENT_OPERATOR(/)
 
 EXPORT_VECTOR_VECTOR_OPERATOR(+)
 EXPORT_VECTOR_VECTOR_OPERATOR(-)
@@ -134,8 +143,7 @@ namespace Math {
     /// @returns The absolute values.
     export template<typename Range> requires ranges::contiguous_range<Range> && ranges::sized_range<Range>
     [[nodiscard]] vector<ranges::range_value_t<Range>> Abs(const Range &values) {
-        using T = ranges::range_value_t<Range>;
-        return values | views::transform([](T value) { return Abs(value); }) | ranges::to<vector>();
+        return values | views::transform([](auto value) { return Abs(value); }) | ranges::to<vector>();
     }
 
     /// Returns the square of a value.
