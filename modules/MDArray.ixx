@@ -11,6 +11,7 @@ using namespace std;
 using namespace experimental;
 
 export namespace std {
+    using std::dims;
     using std::dynamic_extent;
     using std::extents;
     using std::full_extent;
@@ -18,7 +19,6 @@ export namespace std {
     using std::submdspan;
 
     namespace experimental {
-        using experimental::dims;
         using experimental::mdarray;
     }
 }

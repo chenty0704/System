@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+import System.Base;
 import System.Math;
 
 using namespace std;

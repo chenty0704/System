@@ -2,6 +2,8 @@
 
 #include "System/Macros.h"
 
+import System.Base;
+
 using namespace std;
 using namespace literals;
 

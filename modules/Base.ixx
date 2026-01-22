@@ -9,7 +9,6 @@ export module System.Base;
 #pragma warning(disable: 4834 5244)
 
 #define _BUILD_STD_MODULE
-#define _FSTREAM_SUPPORTS_EXPERIMENTAL_FILESYSTEM false
 
 #include <algorithm>
 #include <array>
