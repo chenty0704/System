@@ -24,11 +24,12 @@ export namespace boost::json {
     using json::get;
     using json::make_error_code;
     using json::value;
+    using json::value_to;
     using json::value_to_tag;
 }
 
 export template<DescribedStruct T>
-[[nodiscard]] T tag_invoke(const json::value_to_tag<T> &, const json::value &value) {
+[[nodiscard]] T tag_invoke(json::value_to_tag<T>, const json::value &value) {
     using Members = describe::describe_members<T, describe::mod_public | describe::mod_inherited>;
 
     static const auto Assign = []<typename M>(M &member, const json::value &value) {
@@ -37,6 +38,8 @@ export template<DescribedStruct T>
 
     T object;
     for (const auto &[key, _value] : value.as_object()) {
+        if (key.starts_with('$')) continue;
+
         auto isMatched = false;
         mp11::mp_for_each<Members>([&](auto member) {
             if (!isMatched && member.name == key) {
