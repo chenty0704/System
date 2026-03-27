@@ -109,9 +109,9 @@ export {
 /// @returns The execution time of the function.
 export template<invocable Fun>
 [[nodiscard]] chrono::duration<double> MeasureTime(Fun function) {
-    const auto beginTime = chrono::high_resolution_clock::now();
+    const auto beginTime = chrono::steady_clock::now();
     function();
-    const auto endTime = chrono::high_resolution_clock::now();
+    const auto endTime = chrono::steady_clock::now();
     return endTime - beginTime;
 }
 
@@ -121,8 +121,8 @@ export template<invocable Fun>
 /// @returns The return value of the function with the execution time.
 export template<invocable Fun>
 [[nodiscard]] pair<invoke_result_t<Fun>, chrono::duration<double>> MeasureTimedValue(Fun function) {
-    const auto beginTime = chrono::high_resolution_clock::now();
+    const auto beginTime = chrono::steady_clock::now();
     const auto value = function();
-    const auto endTime = chrono::high_resolution_clock::now();
+    const auto endTime = chrono::steady_clock::now();
     return {value, endTime - beginTime};
 }
