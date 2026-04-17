@@ -91,11 +91,13 @@ namespace Math {
     }
 
     /// Rounds a value to the nearest multiple of a base value.
+    /// @tparam T The type of the base value.
     /// @param value A value to round.
     /// @param base A base value.
     /// @returns The nearest multiple of the base value.
-    export [[nodiscard]] double Round(double value, double base) {
-        return round(value / base) * base;
+    export template<typename T> requires is_arithmetic_v<T>
+    [[nodiscard]] T Round(double value, T base) {
+        return Round(value / base) * base;
     }
 
     /// Returns the greatest integer less than or equal to a value.
@@ -106,11 +108,13 @@ namespace Math {
     }
 
     /// Rounds a value down to the nearest multiple of a base value.
+    /// @tparam T The type of the base value.
     /// @param value A value to round down.
     /// @param base A base value.
     /// @returns The greatest multiple of the base value less than or equal to the value.
-    export [[nodiscard]] double Floor(double value, double base) {
-        return floor(value / base) * base;
+    export template<typename T> requires is_arithmetic_v<T>
+    [[nodiscard]] T Floor(double value, T base) {
+        return Floor(value / base) * base;
     }
 
     /// Returns the least integer greater than or equal to a value.
@@ -121,18 +125,20 @@ namespace Math {
     }
 
     /// Rounds a value up to the nearest multiple of a base value.
+    /// @tparam T The type of the base value.
     /// @param value A value to round up.
     /// @param base A base value.
     /// @returns The least multiple of the base value greater than or equal to the value.
-    export [[nodiscard]] double Ceiling(double value, double base) {
-        return ceil(value / base) * base;
+    export template<typename T> requires is_arithmetic_v<T>
+    [[nodiscard]] T Ceiling(double value, T base) {
+        return Ceiling(value / base) * base;
     }
 
     /// Returns the absolute value.
     /// @tparam T The type of the value.
     /// @param value A value.
     /// @returns The absolute value.
-    export template<typename T>
+    export template<typename T> requires is_arithmetic_v<T>
     [[nodiscard]] T Abs(T value) {
         return abs(value);
     }
@@ -147,16 +153,20 @@ namespace Math {
     }
 
     /// Returns the square of a value.
+    /// @tparam T The type of the value.
     /// @param value A value to square.
     /// @returns The square of the value.
-    export [[nodiscard]] double Square(double value) {
+    export template<typename T> requires is_arithmetic_v<T>
+    [[nodiscard]] T Square(T value) {
         return value * value;
     }
 
     /// Returns the squares of a list of values.
+    /// @tparam Range The type of the list.
     /// @param values A list of values.
     /// @returns The squares of the list of values.
-    export [[nodiscard]] vector<double> Square(span<const double> values) {
+    export template<typename Range> requires ranges::contiguous_range<Range> && ranges::sized_range<Range>
+    [[nodiscard]] vector<ranges::range_value_t<Range>> Square(const Range &values) {
         return values * values;
     }
 
@@ -237,15 +247,15 @@ namespace Math {
         requires ranges::contiguous_range<Range1> && ranges::sized_range<Range1>
         && ranges::contiguous_range<Range2> && ranges::sized_range<Range2>
     [[nodiscard]] auto Dot(const Range1 &values1, const Range2 &values2) {
-        using T = decltype(ranges::range_value_t<Range1>() * ranges::range_value_t<Range2>());
-        return transform_reduce(ranges::cbegin(values1), ranges::cend(values1), ranges::cbegin(values2), T());
+        using Result = decltype(ranges::range_value_t<Range1>() * ranges::range_value_t<Range2>());
+        return transform_reduce(ranges::cbegin(values1), ranges::cend(values1), ranges::cbegin(values2), Result());
     }
 
     /// Returns the mean of a list of values.
     /// @param values A list of values.
     /// @returns The mean of the list of values.
     export [[nodiscard]] double Mean(span<const double> values) {
-        return Total(values) / static_cast<double>(values.size());
+        return Total(values) / values.size();
     }
 
     /// Returns the variance of a list of values with known mean.
@@ -255,7 +265,7 @@ namespace Math {
     export [[nodiscard]] double Variance(span<const double> values, double mean) {
         auto buffer = values - mean;
         buffer *= buffer;
-        return Total(buffer) / static_cast<double>(values.size() - 1);
+        return Total(buffer) / (values.size() - 1);
     }
 
     /// Returns the variance of a list of values.
@@ -273,7 +283,7 @@ namespace Math {
     /// @returns The covariance between the two lists of values
     export [[nodiscard]] double Covariance(span<const double> values1, span<const double> values2,
                                            double mean1, double mean2) {
-        return Dot(values1 - mean1, values2 - mean2) / static_cast<double>(values1.size() - 1);
+        return Dot(values1 - mean1, values2 - mean2) / (values1.size() - 1);
     }
 
     /// Returns the covariance between two lists of values.
