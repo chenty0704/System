@@ -6,11 +6,12 @@ module;
 
 export module System.Base;
 
-#pragma warning(disable: 4834 5244)
+#pragma warning(disable: 5244)
 
 #define _BUILD_STD_MODULE
 
 #include <algorithm>
+#include <any>
 #include <array>
 #include <atomic>
 #include <barrier>
@@ -30,11 +31,14 @@ export module System.Base;
 #include <execution>
 #include <expected>
 #include <filesystem>
+#include <flat_map>
+#include <flat_set>
 #include <format>
 #include <forward_list>
 #include <fstream>
 #include <functional>
 #include <future>
+#include <generator>
 #include <initializer_list>
 #include <iomanip>
 #include <ios>
@@ -94,7 +98,6 @@ export module System.Base;
 #include <version>
 
 using namespace std;
-using namespace literals;
 
 export {
     using ::int8_t;

@@ -7,9 +7,6 @@ module;
 
 export module System.MDArray;
 
-using namespace std;
-using namespace experimental;
-
 export namespace std {
     using std::dims;
     using std::dynamic_extent;

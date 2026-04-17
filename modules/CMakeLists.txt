@@ -22,8 +22,7 @@ target_compile_features(System PUBLIC cxx_std_23)
 target_compile_options(System PUBLIC /W4 /WX /arch:AVX2)
 target_compile_definitions(System PUBLIC
         _MSVC_STL_HARDENING=true
-        _MSVC_STL_DESTRUCTOR_TOMBSTONES=true
-        _FSTREAM_SUPPORTS_EXPERIMENTAL_FILESYSTEM=false)
+        _MSVC_STL_DESTRUCTOR_TOMBSTONES=true)
 target_link_options(System PUBLIC /WX)
 
 install(TARGETS System EXPORT SystemTargets

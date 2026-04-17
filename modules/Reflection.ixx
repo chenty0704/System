@@ -54,14 +54,14 @@ ostream &operator<<(ostream &stream, const T &object) {
     return stream << "}";
 }
 
-export template<DescribedEnum E>
+template<DescribedEnum E>
 struct formatter<E> : formatter<string_view> {
     format_context::iterator format(E value, format_context &context) const {
         return formatter<string_view>::format(describe::enum_to_string(value, "Unknown"), context);
     }
 };
 
-export template<DescribedStruct T>
+template<DescribedStruct T>
 struct formatter<T> : formatter<string_view> {
     format_context::iterator format(const T &object, format_context &context) const {
         return formatter<string_view>::format((ostringstream() << object).view(), context);
